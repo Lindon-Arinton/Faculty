@@ -51,5 +51,5 @@ edge_result=json.loads(php.stdout)
 assert [p['outcome'] for p in edge_result]==model.predict(np.asarray([[p[k] for k in keys] for p in edges])).tolist()
 report={'status':'PASS','parity_records':len(rows),'threshold_edge_cases':len(edges),'metrics_reproduced':True,
         'split_disjoint':True,'first_semester_features_only':True}
-(ROOT/'analytics/artifacts/validation.json').write_text(json.dumps(report,indent=2)+'\n')
+(Path('/private/tmp')/'faculty-model-validation.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report,indent=2))

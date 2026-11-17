@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const stage = process.env.QA_STAGE || 'before';
 const base = process.env.QA_BASE_URL || 'http://localhost/Faculty/';
 if (!/^http:\/\/(localhost\/Faculty\/|127\.0\.0\.1:\d+\/)$/.test(base)) throw Error('Local portal only');
-const output = stage==='phase6' ? path.join(root,'analytics/phase6/browser') : path.join(root, 'analytics/qa', stage);
+const output = path.join('/private/tmp/faculty-visual-qa', stage);
 fs.mkdirSync(path.join(output,'screenshots'), {recursive:true});
 const evidenceStyle = stage==='fixtures' ? 'html::after {content:"ISOLATED QA FIXTURES — NOT UNIVERSITY RECORDS";position:fixed;left:0;right:0;top:0;text-align:center;z-index:99999;background:#fff4d6;color:#704000;font:11px sans-serif;padding:4px 8px;border:1px solid #bb8b22;} @media print {html::after {top:auto;bottom:0;}}' : '';
 function php(code) {

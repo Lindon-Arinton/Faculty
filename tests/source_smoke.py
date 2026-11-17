@@ -73,6 +73,6 @@ check(before['tables']==after['tables'],'HTTP login and predictions preserve eve
 check(not after['blockers'],'Final foreign key integrity verified')
 report={'status':'PASS','base_url':BASE,'checks_passed':len(checks),'checks':checks,'account_fields_unchanged':True,
         'source_database':'veritas_portal','academic_records':sum(t['rows'] for n,t in before['tables'].items() if n not in ['meta','users']),'user_accounts':1,'orphan_rows':0,
-        'browser_visual_check':('Not part of this HTTP suite; see analytics/phase6/PHASE6_REPORT.md for browser verification.' if args.demo else 'Not part of this HTTP suite; see analytics/qa/PHASE5_REPORT.md for browser verification.')}
-(ROOT/('analytics/phase6/source-http-results.json' if args.demo else 'analytics/artifacts/source-validation.json')).write_text(json.dumps(report,indent=2)+'\n')
+        'browser_visual_check':'Not part of this HTTP suite.'}
+(Path('/private/tmp')/('faculty-source-validation-demo.json' if args.demo else 'faculty-source-validation.json')).write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({k:v for k,v in report.items() if k!='checks'},indent=2))
