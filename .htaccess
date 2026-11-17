@@ -1,0 +1,6 @@
+Options -Indexes
+<FilesMatch "\.(sql|json|joblib|py|md|lock)$">
+    Require all denied
+</FilesMatch>
+# Prevent hidden directories such as .git from being served.
+RedirectMatch 404 /\.

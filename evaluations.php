@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/layout.php';
 
 $user = require_login();
+require_permission('sete.view', $user);
 
 const RATING_BANDS = [
     'Excellent'     => [4.5, 5.01],
@@ -51,18 +52,25 @@ $page = paginate($rows, 20);
 
 // Summary
 $total = count($scope);
-$avg = $total ? array_sum(array_column($scope, 'rating')) / $total : 0;
-$prevAvg = $total ? array_sum(array_column($scope, 'previous')) / $total : 0;
 $responses = array_sum(array_column($scope, 'responses'));
-$enrolled = array_sum(array_column($scope, 'enrolled'));
+$avg = $responses ? array_sum(array_map(fn($f) => $f['rating'] * $f['responses'], $scope)) / $responses : 0;
+$historyScope = array_values(array_filter($scope, fn($f) => $f['has_previous']));
+$prevAvg = $historyScope ? array_sum(array_column($historyScope, 'previous')) / count($historyScope) : null;
+$responses = array_sum(array_column($scope, 'responses'));
+$enrolled = array_sum(array_column($everyone, 'enrolled'));
 
 $categoryAvg = [];
 foreach (EVAL_CATEGORIES as $cat) {
-    $categoryAvg[$cat] = $total ? array_sum(array_map(fn($f) => $f['categories'][$cat], $scope)) / $total : 0;
+    $categoryAvg[$cat] = $responses ? array_sum(array_map(fn($f) => $f['categories'][$cat] * $f['responses'], $scope)) / $responses : 0;
 }
 
 $bands = array_merge(array_fill_keys(array_keys(RATING_BANDS), 0), array_count_values(array_column($scope, 'band')));
 
+$invitedByGroup = [];
+foreach ($everyone as $f) {
+    $key = $college ? $f['rank'] : $f['college'];
+    $invitedByGroup[$key] = ($invitedByGroup[$key] ?? 0) + $f['enrolled'];
+}
 $byCollege = [];
 foreach ($scope as $f) {
     $key = $college ? $f['rank'] : $f['college'];
@@ -82,10 +90,11 @@ page_head(
     . modal_button('facultyModal', icon('plus', 16) . ' Add faculty')
 );
 ?>
+    <section class="card panel"><p class="muted small">Interpret SETE scores alongside response counts, participation, course context, peer review and other evidence. Ratings alone must not determine personnel decisions. Student outcome predictions do not use SETE data.</p></section>
     <section class="grid grid-4">
         <?= stat_card('Faculty evaluated', number_format($total), $college ? e($college) : 'Across ' . count(colleges()) . ' colleges', 'users', 'blue') ?>
-        <?= stat_card('Average rating', number_format($avg, 2), ($avg >= $prevAvg ? icon('arrow-up', 11) . ' ' : icon('arrow-dn', 11) . ' ') . number_format(abs($avg - $prevAvg), 2) . ' vs last term', 'star', 'orange') ?>
-        <?= stat_card('Response rate', pct($responses, $enrolled) . '%', number_format($enrolled) . ' students invited', 'check-sq', 'green') ?>
+        <?= stat_card('Average rating', $responses ? number_format($avg, 2) : '—', $responses ? ($prevAvg === null ? 'No prior-term baseline' : 'Prior-term average: ' . number_format($prevAvg, 2)) : 'No evaluation responses yet', 'star', 'orange') ?>
+        <?= stat_card('Response rate', $enrolled ? pct($responses, $enrolled) . '%' : '—', number_format($enrolled) . ' students invited', 'check-sq', 'green') ?>
         <?= stat_card('Total responses', number_format($responses), 'Individual answers stay private', 'shield', 'purple') ?>
     </section>
 
@@ -94,19 +103,19 @@ page_head(
             <div class="panel-head">
                 <div>
                     <h2>Ratings by <?= $college ? 'academic rank' : 'college' ?></h2>
-                    <p class="muted small">Average overall rating out of 5</p>
+                    <p class="muted small">Response-weighted overall rating out of 5</p>
                 </div>
             </div>
             <div class="table-wrap">
                 <table class="data">
-                    <thead><tr><th><?= $college ? 'Rank' : 'College' ?></th><th class="num">Faculty</th><th class="num">Responses</th><th class="num">Response rate</th><th>Average rating</th></tr></thead>
+                    <thead><tr><th><?= $college ? 'Rank' : 'College' ?></th><th class="num">Evaluated faculty</th><th class="num">Responses</th><th class="num">Response rate</th><th>Average rating</th></tr></thead>
                     <tbody>
-                    <?php foreach ($byCollege as $name => $list): $a = array_sum(array_column($list, 'rating')) / count($list); ?>
+                    <?php foreach ($byCollege as $name => $list): $a = array_sum(array_map(fn($f) => $f['rating'] * $f['responses'], $list)) / max(1, array_sum(array_column($list, 'responses'))); ?>
                         <tr>
                             <td><a class="link-plain" href="<?= e(url_with($college ? ['rank' => $name] : ['college' => $name]) . '#list') ?>"><strong><?= e($name) ?></strong></a></td>
                             <td class="num"><?= count($list) ?></td>
                             <td class="num"><?= number_format(array_sum(array_column($list, 'responses'))) ?></td>
-                            <td class="num"><?= pct(array_sum(array_column($list, 'responses')), array_sum(array_column($list, 'enrolled'))) ?>%</td>
+                            <td class="num"><?= pct(array_sum(array_column($list, 'responses')), $invitedByGroup[$name] ?? 0) ?>%</td>
                             <td><div class="cell-rating"><strong><?= number_format($a, 2) ?></strong><?= stars($a) ?></div></td>
                         </tr>
                     <?php endforeach; ?>
@@ -117,8 +126,8 @@ page_head(
 
         <div class="stack">
             <div class="card panel">
-                <div class="panel-head"><div><h2>By category</h2><p class="muted small">Average score out of 5</p></div></div>
-                <?= bar_list($categoryAvg, 5, 'rating', 'orange block') ?>
+                <div class="panel-head"><div><h2>By category</h2><p class="muted small">Response-weighted score out of 5</p></div></div>
+                <?= $responses ? bar_list($categoryAvg, 5, 'rating', 'orange block') : '<p class="empty">No evaluation responses recorded.</p>' ?>
             </div>
             <div class="card panel">
                 <div class="panel-head"><div><h2>Rating bands</h2><p class="muted small">Number of faculty in each band</p></div></div>
@@ -156,7 +165,7 @@ page_head(
                         <td class="num"><div class="cell-stack cell-stack--end"><strong><?= (int) $f['responses'] ?></strong><span><?= pct($f['responses'], $f['enrolled']) ?>% responded</span></div></td>
                         <?php if ($rated): ?>
                         <td><div class="cell-rating"><strong><?= number_format($f['rating'], 1) ?></strong><?= stars($f['rating']) ?></div></td>
-                        <td class="nowrap"><span class="delta <?= $change > 0 ? 'up' : ($change < 0 ? 'down' : '') ?>"><?= $change > 0 ? '▲ ' : ($change < 0 ? '▼ ' : '') ?><?= $change == 0 ? 'No change' : number_format(abs($change), 1) ?></span></td>
+                        <td class="nowrap"><span class="delta <?= $change > 0 ? 'up' : ($change < 0 ? 'down' : '') ?>"><?= $change > 0 ? '▲ ' : ($change < 0 ? '▼ ' : '') ?><?= !$f['has_previous'] ? 'No prior-term data' : ($change == 0 ? 'No change' : number_format(abs($change), 1)) ?></span></td>
                         <td><div class="cell-stack"><strong><?= e($weak) ?></strong><span><?= number_format($f['categories'][$weak], 1) ?> / 5</span></div></td>
                         <?php else: ?>
                         <td colspan="3"><?= tag(NOT_EVALUATED, 'slate') ?> <span class="muted xsmall"><?= $f['sections'] ? $f['sections'] . ' class' . ($f['sections'] === 1 ? '' : 'es') . ', no responses yet' : 'No classes this term' ?></span></td>

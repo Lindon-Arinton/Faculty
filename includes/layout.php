@@ -11,21 +11,27 @@ require_once __DIR__ . '/forms.php';
 
 function nav_items(): array
 {
-    $forReview = count_for_review();
-    return [
+    $forReview = can('academic.view') ? count_for_review() : 0;
+    $items = [
         'overview'    => ['label' => 'Overview',            'icon' => 'grid',      'href' => 'index.php'],
         'incoming'    => ['label' => 'Incoming enrollment', 'icon' => 'user-plus', 'href' => 'incoming.php',    'badge' => $forReview],
         'schedule'    => ['label' => 'Campus schedule',     'icon' => 'calendar',  'href' => 'schedule.php'],
         'enrollment'  => ['label' => 'Enrollment',          'icon' => 'users',     'href' => 'enrollment.php'],
         'grades'      => ['label' => 'Grade submissions',   'icon' => 'check-sq',  'href' => 'grades.php'],
-        'risk'        => ['label' => 'At-risk students',    'icon' => 'alert',     'href' => 'at-risk.php',     'badge' => count(at_risk())],
+        'risk'        => ['label' => 'At-risk students',    'icon' => 'alert',     'href' => 'at-risk.php',     'badge' => can('academic.view') ? count(at_risk()) : 0],
         'evaluations' => ['label' => 'Faculty evaluations', 'icon' => 'chart',     'href' => 'evaluations.php'],
+        'predictions' => ['label' => 'Outcome prediction', 'icon' => 'chart', 'href' => 'predictions.php'],
+        'setup' => ['label' => 'Reference setup', 'icon' => 'grid', 'href' => 'setup.php'],
     ];
+    return array_filter($items, fn($item, $key) => can(match ($key) {
+        'predictions' => 'prediction.demo', 'setup' => 'academic.manage', 'evaluations' => 'sete.view', default => 'academic.view',
+    }), ARRAY_FILTER_USE_BOTH);
 }
 
 /** Things that need attention, for the bell menu. */
 function notifications(): array
 {
+    if (!can('academic.view')) return [];
     $risk = at_risk();
     $urgent = count(array_filter($risk, fn($r) => $r['priority'] === 'Urgent' && $r['intervention'] === 'Not contacted'));
     $pending = count(array_filter(classes(), fn($c) => $c['grade'] !== 'Submitted'));
@@ -87,7 +93,7 @@ function page_start(string $active, string $title, array $user): void
         </nav>
 
         <div class="access-card">
-            <div class="access-title"><?= icon('shield', 14) ?> School-wide access</div>
+            <div class="access-title"><?= icon('shield', 14) ?> <?= can('academic.view') ? 'Institutional access' : 'Demonstration access' ?></div>
             <p>Institutional records are role-protected and evaluation responses stay anonymous.</p>
         </div>
 
@@ -107,7 +113,7 @@ function page_start(string $active, string $title, array $user): void
             <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu"><?= icon('menu') ?></button>
             <form class="search" action="search.php" method="get" role="search">
                 <?= icon('search', 18) ?>
-                <input type="search" name="q" id="globalSearch" value="<?= e($searchValue) ?>" placeholder="Search school-wide records" autocomplete="off">
+                <input type="search" name="q" id="globalSearch" value="<?= e($searchValue) ?>" placeholder="<?= can('academic.view') ? 'Search school-wide records' : 'Demonstration access only' ?>"<?= can('academic.view') ? '' : ' disabled' ?> autocomplete="off">
                 <kbd>Ctrl K</kbd>
             </form>
             <div class="topbar-actions">
@@ -138,6 +144,19 @@ function page_start(string $active, string $title, array $user): void
         </header>
 
         <main class="content">
+            <?php if(can('academic.view')): $allTerms=rows('SELECT * FROM terms ORDER BY starts_on DESC'); if($allTerms): $yearOptions=[]; foreach($allTerms as$t)$yearOptions[academic_year($t)]=academic_year($t); ?>
+            <form method="get" class="filters academic-context" aria-label="Academic period filters">
+                <?php foreach($_GET as$k=>$v)if(!in_array($k,['ay','term','export'])&&is_string($v)): ?><input type="hidden" name="<?= e($k) ?>" value="<?= e($v) ?>"><?php endif; ?>
+                <label>Academic year <select name="ay" class="f-input" aria-label="Academic year" data-autosubmit><?php foreach($yearOptions as$y): ?><option<?= $y===academic_year(current_term())?' selected':'' ?>><?= e($y) ?></option><?php endforeach; ?></select></label>
+                <label>Semester <select name="term" class="f-input" aria-label="Semester" data-autosubmit><?php foreach($allTerms as$t)if(academic_year($t)===academic_year(current_term())): ?><option value="<?= (int)$t['id'] ?>"<?= (int)$t['id']===(int)current_term()['id']?' selected':'' ?>><?= e($t['name']) ?></option><?php endif; ?></select></label>
+                <?php if(is_historical_term()): ?><span class="pill pill--grey">Historical term · read-only · current profile statuses</span><?php endif; ?>
+            </form>
+            <?php endif; endif; ?>
+            <?php if (can('academic.view') && setup_missing()): ?>
+                <section class="card panel" role="alert" aria-label="Academic setup required"><h2>Academic setup required</h2>
+                <p class="muted">Academic setup is incomplete. Empty counts represent missing records, not a completed academic assessment. Configure <?= e(implode(', ', setup_missing())) ?> before entering academic records.
+                <?php if (can('academic.manage')): ?><a href="setup.php">Open reference setup</a><?php else: ?>Contact an administrator.<?php endif; ?></p></section>
+            <?php endif; ?>
             <?php if ($flash): ?>
                 <div class="toast toast--<?= e($flash['type']) ?>" id="toast" role="status">
                     <?= icon($flash['type'] === 'ok' ? 'check' : 'alert', 18) ?><span><?= e($flash['text']) ?></span>

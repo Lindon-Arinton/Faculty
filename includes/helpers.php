@@ -304,6 +304,7 @@ function donut_chart(array $segments, string $center, string $sub, int $size = 1
 /** Small area line chart. $series = [label => value]. */
 function line_chart(array $series, string $color = 'var(--red-500)', int $height = 140): string
 {
+    if (!$series) return '<p class="empty">No trend data available.</p>';
     $vals = array_values($series);
     $labels = array_keys($series);
     $lo = min($vals) - (max($vals) - min($vals)) * 0.6 - 1;

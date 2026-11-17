@@ -2,18 +2,21 @@
 require_once __DIR__ . '/includes/layout.php';
 
 $user = require_login();
+require_permission('academic.view', $user);
 require __DIR__ . '/includes/data.php';
+
+$briefView = q('view') === 'brief';
 
 $hour = (int) date('G', $now);
 $greeting = $hour < 12 ? 'Good morning' : ($hour < 18 ? 'Good afternoon' : 'Good evening');
 
 $collegeTotal = array_sum($colleges);
-$collegeMax = max($colleges);
+$collegeMax = max($colleges ?: [1]);
 $gradeTotal = array_sum(array_column($gradeStatus, 'value'));
-$gradePct = (int) round($gradeStatus[0]['value'] / $gradeTotal * 100);
+$gradePct = (int) round($gradeStatus[0]['value'] / max(1, $gradeTotal) * 100);
 $trendVals = array_values($riskTrend);
-$trendChange = round((1 - end($trendVals) / $trendVals[0]) * 100, 1);
-$pipelineMax = $pipeline[0]['value'];
+$trendChange = ($trendVals[0] ?? 0) > 0 ? round((1 - end($trendVals) / $trendVals[0]) * 100, 1) : null;
+$pipelineMax = max(1, $pipeline[0]['value']);
 $conversion = round(end($pipeline)['value'] / $pipelineMax * 100, 1);
 $tones = ['blue', 'purple', 'green'];
 
@@ -22,14 +25,17 @@ $scoped = fn(string $url) => $collegeFilter ? $url . (str_contains($url, '?') ? 
 
 page_start('overview', 'Overview', $user);
 ?>
+            <div class="dashboard-view<?= $briefView ? ' dashboard-view--brief' : '' ?>">
             <!-- Greeting -->
             <section class="page-head">
                 <div>
                     <div class="eyebrow"><?= e(strtoupper(date('l, F j, Y', $now))) ?></div>
-                    <h1><?= e($greeting) ?>, <?= e($user['name']) ?>.</h1>
-                    <p class="muted">Here’s what’s happening across the university today.</p>
+                    <h1><?= $briefView ? 'Academic dashboard' : e($greeting) . ', ' . e($user['name']) . '.' ?></h1>
+                    <p class="muted">Academic monitoring for the authorized academic administrator.</p>
                 </div>
                 <form class="filters" method="get" action="index.php">
+                    <?php if ($briefView): ?><input type="hidden" name="view" value="brief"><?php endif; ?>
+                    <a class="btn btn--ghost btn--sm" href="<?= e(url_with(['view'=>$briefView ? null : 'brief'])) ?>"><?= $briefView ? 'Full overview' : 'Dashboard brief' ?></a>
                     <div class="select">
                         <select name="college" aria-label="College" data-autosubmit>
                             <option value="">All colleges</option>
@@ -37,22 +43,20 @@ page_start('overview', 'Overview', $user);
                         </select>
                         <?= icon('chev-d', 16) ?>
                     </div>
-                    <div class="select">
-                        <select aria-label="Term" title="Records are shown for the current term">
-                            <option><?= e(current_term()['name']) ?> (current)</option>
-                        </select>
-                        <?= icon('chev-d', 16) ?>
-                    </div>
+
                 </form>
             </section>
 
             <!-- Stat cards -->
-            <section class="grid grid-4">
+            <section class="grid grid-5" id="bat405Kpis" aria-label="Five institutional KPI cards">
                 <?php foreach ($stats as $s): ?>
                     <?= stat_card($s['label'], $s['value'], e($s['note']), $s['icon'], $s['tone'], $s['href']) ?>
                 <?php endforeach; ?>
             </section>
 
+            <?php foreach ($dashboardWarnings as $warning): ?>
+            <section class="notice" role="alert" data-dashboard-warning><span><strong><?= e($warning['label']) ?></strong> · <?= e($warning['text']) ?></span></section>
+            <?php endforeach; ?>
             <!-- Institutional KPIs -->
             <section class="card panel">
                 <div class="panel-head">
@@ -70,7 +74,7 @@ page_start('overview', 'Overview', $user);
                             <?php if ($enrollmentGrowth !== null): ?><span class="pill pill--green"><?= icon('arrow-up', 12) ?> <?= e((string) $enrollmentGrowth) ?>%</span><?php endif; ?>
                         </div>
                         <div class="kpi-value"><?= number_format($collegeTotal) ?></div>
-                        <ul class="bars">
+                        <ul class="bars" data-chart="enrollment">
                             <?php foreach ($colleges as $name => $count): ?>
                                 <li data-tip="<?= e($name . '|' . number_format($count) . ' students · ' . pct($count, $collegeTotal, 1) . '% of enrollment') ?>">
                                     <span class="bars-label"><?= e($name) ?></span>
@@ -79,28 +83,32 @@ page_start('overview', 'Overview', $user);
                                 </li>
                             <?php endforeach; ?>
                         </ul>
+                        <?php if (!$colleges): ?><p class="empty">No enrollment records available.</p><?php endif; ?>
                     </a>
 
                     <a class="kpi kpi--link" href="<?= e($scoped('grades.php')) ?>">
                         <div class="kpi-head">
                             <span class="kpi-title">Grade submission rate</span>
-                            <span class="pill pill--grey"><?= $daysToDeadline > 0 ? 'Due ' . e(date('M j', $deadline)) : 'Past due' ?></span>
+                            <span class="pill pill--grey"><?= !$hasCurrentTerm ? 'No active term' : ($daysToDeadline >= 0 ? 'Due ' . e(date('M j', $deadline)) : 'Past due') ?></span>
                         </div>
-                        <div class="kpi-value"><?= $gradePct ?>%</div>
-                        <?= donut_chart(array_map(fn($g) => [$g['label'], $g['value'], $g['color']], $gradeStatus), $gradePct . '%', 'submitted') ?>
-                        <div class="kpi-note tone-orange-soft"><?= icon('alert', 14) ?> <?= $gradesPending ?> classes still need final grades</div>
+                        <div class="kpi-value"><?= $gradeTotal ? $gradePct . '%' : '—' ?></div>
+                        <div data-chart="grade-submission"><?= $gradeTotal ? donut_chart(array_map(fn($g) => [$g['label'], $g['value'], $g['color']], $gradeStatus), $gradePct . '%', 'submitted') : '<p class="empty">No class sections available to calculate a submission rate.</p>' ?></div>
+                        <?php if ($gradesPending > 0): ?><div class="kpi-note tone-orange-soft"><?= icon('alert', 14) ?> <?= $gradesPending ?> classes still need final grades</div><?php endif; ?>
                     </a>
 
-                    <a class="kpi kpi--link" href="<?= e($scoped('at-risk.php')) ?>">
+                    <a class="kpi kpi--link" data-chart="risk-trend" href="<?= e($scoped('at-risk.php')) ?>">
                         <div class="kpi-head">
                             <span class="kpi-title">At-risk student trend</span>
-                            <span class="pill pill--green"><?= icon('arrow-dn', 12) ?> <?= e((string) $trendChange) ?>%</span>
+                            <span class="pill pill--grey"><?= $trendChange === null ? '' : icon('arrow-dn', 12) ?> <?= $trendChange === null ? 'No prior baseline' : e((string) $trendChange) . '%' ?></span>
                         </div>
-                        <div class="kpi-value"><?= (int) end($trendVals) ?></div>
+                        <div class="kpi-value"><?= $trendVals ? (int) end($trendVals) : '—' ?></div>
                         <?= line_chart($riskTrend) ?>
                     </a>
                 </div>
             </section>
+
+            <div class="dashboard-extended">
+            <?php require __DIR__ . '/includes/prediction-panel.php'; ?>
 
             <!-- Incoming enrollment -->
             <section class="card panel panel--flush">
@@ -130,20 +138,21 @@ page_start('overview', 'Overview', $user);
                                 <h3>Enrollment pipeline</h3>
                                 <p class="muted xsmall">Conversion from application to enrollment</p>
                             </div>
-                            <span class="conv"><?= e((string) $conversion) ?>% overall conversion</span>
+                            <span class="conv"><?= $appTotal ? e((string) $conversion) . '% overall conversion' : 'Conversion unavailable: no applications' ?></span>
                         </div>
-                        <div class="funnel">
+                        <?php if ($appTotal): ?><div class="funnel">
                             <?php foreach ($pipeline as $step): ?>
                                 <div class="funnel-step funnel-<?= e($step['tone']) ?>" style="--w: <?= round($step['value'] / $pipelineMax * 100, 1) ?>%" data-tip="<?= e($step['label'] . '|' . number_format($step['value']) . ' applicants · ' . pct($step['value'], $pipelineMax, 1) . '% of applications') ?>">
                                     <span><?= e($step['label']) ?></span><strong><?= number_format($step['value']) ?></strong>
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        <div class="notice">
+                        <?php else: ?><p class="empty">No admissions data available.</p><?php endif; ?>
+                        <?php if ($incomplete > 0): ?><div class="notice">
                             <?= icon('alert', 16) ?>
                             <span><strong><?= number_format($incomplete) ?> applicants</strong> still have incomplete requirements</span>
                             <a href="<?= e($scoped('incoming.php?status=Pending+documents')) ?>" class="notice-link">Review</a>
-                        </div>
+                        </div><?php endif; ?>
                     </div>
 
                     <div class="split-col">
@@ -171,7 +180,7 @@ page_start('overview', 'Overview', $user);
                                     <?= icon('chev-r', 16, 'chev') ?>
                                 </li>
                             <?php endforeach; ?>
-                            <li class="list-empty" hidden>No recent applicants with this status. <a class="link" href="incoming.php">See all applicants</a></li>
+                            <li class="list-empty"<?= $applicants ? ' hidden' : '' ?>>No recent applicants with this status. <a class="link" href="incoming.php">See all applicants</a></li>
                         </ul>
                     </div>
                 </div>
@@ -219,6 +228,7 @@ page_start('overview', 'Overview', $user);
                         </div>
                         <a class="icon-btn" href="<?= e($scoped('grades.php')) ?>" aria-label="Open grade submissions"><?= icon('more', 18) ?></a>
                     </div>
+                    <?php if (!$gradeByCollege): ?><p class="empty">No class sections available.</p><?php endif; ?>
                     <ul class="progress-list">
                         <?php foreach ($gradeByCollege as $g): $done = $g['pending'] === 0; ?>
                             <li>
@@ -265,6 +275,7 @@ page_start('overview', 'Overview', $user);
                                 <?= icon('chev-r', 16, 'chev') ?>
                             </li>
                         <?php endforeach; ?>
+                        <?php if (!$students): ?><li class="list-empty">No student records loaded.</li><?php endif; ?>
                     </ul>
                 </div>
 
@@ -274,7 +285,7 @@ page_start('overview', 'Overview', $user);
                             <h2>School-wide risk monitoring</h2>
                             <p class="muted small">Students across all colleges who may need support</p>
                         </div>
-                        <?= tag(count($riskAll) . ' total', 'red') ?>
+                        <?= tag($hasRiskEvidence ? count($riskAll) . ' observed cases' : 'Assessment unavailable', $hasRiskEvidence ? 'red' : 'slate') ?>
                     </div>
                     <ul class="list list--padded">
                         <?php foreach ($atRisk as $r): ?>
@@ -291,9 +302,10 @@ page_start('overview', 'Overview', $user);
                                 <?= icon('chev-r', 16, 'chev') ?>
                             </li>
                         <?php endforeach; ?>
+                        <?php if (!$atRisk): ?><li class="list-empty"><?= $hasRiskEvidence ? 'No flags in the available evidence.' : 'No grade or backlog evidence available.' ?></li><?php endif; ?>
                     </ul>
                     <div class="panel-pad panel-pad--bottom">
-                        <a href="<?= e($scoped('at-risk.php')) ?>" class="btn btn--ghost btn--block">Review all <?= count($riskAll) ?> at-risk students</a>
+                        <a href="<?= e($scoped('at-risk.php')) ?>" class="btn btn--ghost btn--block"><?= $hasRiskEvidence ? 'Review ' . count($riskAll) . ' observed at-risk students' : 'Open academic risk monitoring' ?></a>
                     </div>
                 </div>
             </section>
@@ -328,7 +340,16 @@ page_start('overview', 'Overview', $user);
                                 <?= icon('chev-r', 16, 'chev') ?>
                             </li>
                         <?php endforeach; ?>
+                        <?php if (!$evaluations): ?><li class="list-empty"><?= $responses ? 'No faculty meet the 60-response display threshold.' : 'No faculty evaluation responses recorded.' ?></li><?php endif; ?>
                     </ul>
                 </div>
             </section>
+            </div>
+            <section class="card panel" aria-label="SETE dimension visualization">
+                <div class="panel-head"><div><h2>SETE evaluation dimensions</h2><p class="muted small">Response-weighted average scores out of 5 · <?= e(current_term()['name']) ?></p></div><a class="link-strong" href="<?= e($scoped('evaluations.php')) ?>">View SETE summaries</a></div>
+                <div data-chart="sete-dimensions"><?= $responses ? bar_list($seteCategories, 5, 'rating', 'orange block') : '<p class="empty">No evaluation responses available. Teaching effectiveness cannot be assessed yet.</p>' ?></div>
+                <p class="muted small">Consider participation, sample size, course context and other evidence. SETE alone must not determine personnel decisions. External predictions do not affect these scores.</p>
+            </section>
+            <?php if ($briefView): ?><p class="muted small">BAT 405 · Institutional records only. External demonstration predictions: <a href="predictions.php">Outcome prediction</a>. Proposed review thresholds: any overdue grade submission, urgent support case, or SETE below 3.5/5 with at least 30 responses. Check participation and context.</p><?php endif; ?>
+            </div>
 <?php page_end(); ?>

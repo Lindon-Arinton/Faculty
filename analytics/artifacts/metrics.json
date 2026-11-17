@@ -1,0 +1,220 @@
+{
+  "dataset": {
+    "id": 697,
+    "title": "Predict Students' Dropout and Academic Success",
+    "page": "https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success",
+    "download": "https://archive.ics.uci.edu/static/public/697/predict%2Bstudents%2Bdropout%2Band%2Bacademic%2Bsuccess.zip",
+    "license": "CC BY 4.0",
+    "archive_sha256": "e90e55fd65ec462ae283ebeb2cca409319e3460ed898d8754f62fb35cc83a65d",
+    "csv_sha256": "3ef126de5cefff26eb11fbb4237f1a1401cb64b488e2f1d598c23cedeb4c45ae",
+    "records": 4424,
+    "raw_input_features": 36,
+    "missing_values": 0,
+    "exact_full_record_duplicates": 0,
+    "class_counts": {
+      "Dropout": 1421,
+      "Enrolled": 794,
+      "Graduate": 2209
+    }
+  },
+  "method": {
+    "model": "sklearn.tree.DecisionTreeClassifier",
+    "prediction_time": "After the first semester",
+    "features": [
+      {
+        "key": "enrolled",
+        "column": "Curricular units 1st sem (enrolled)",
+        "label": "First-semester units enrolled",
+        "integer": true,
+        "min": 0.0,
+        "max": 26.0
+      },
+      {
+        "key": "approved",
+        "column": "Curricular units 1st sem (approved)",
+        "label": "First-semester units passed",
+        "integer": true,
+        "min": 0.0,
+        "max": 26.0
+      },
+      {
+        "key": "grade",
+        "column": "Curricular units 1st sem (grade)",
+        "label": "First-semester average grade",
+        "integer": false,
+        "min": 0.0,
+        "max": 18.875
+      },
+      {
+        "key": "evaluations",
+        "column": "Curricular units 1st sem (evaluations)",
+        "label": "First-semester evaluations",
+        "integer": true,
+        "min": 0.0,
+        "max": 45.0
+      }
+    ],
+    "excluded": "All second-semester, demographic, financial and SETE variables",
+    "split": "stratified 80/20",
+    "seed": 405,
+    "train_records": 3539,
+    "test_records": 885,
+    "train_class_counts": {
+      "Dropout": 1137,
+      "Enrolled": 635,
+      "Graduate": 1767
+    },
+    "test_class_counts": {
+      "Dropout": 284,
+      "Enrolled": 159,
+      "Graduate": 442
+    },
+    "cv": "5-fold stratified, shuffled; training set only",
+    "selection_metric": "macro F1",
+    "candidates": 40,
+    "best_parameters": {
+      "class_weight": "balanced",
+      "max_depth": 6,
+      "min_samples_leaf": 40
+    },
+    "selected_cv_macro_f1": 0.6028546988177992,
+    "selected_cv_macro_f1_std": 0.01692457076326849,
+    "selected_cv_dropout_recall": 0.6490609784372826,
+    "cv_note": "Selection scores, not independent performance estimates. Held-out test results below were not used for selection."
+  },
+  "test": {
+    "dropout_recall": 0.6549295774647887,
+    "macro_f1": 0.6136746733451764,
+    "confusion_matrix": [
+      [
+        186,
+        62,
+        36
+      ],
+      [
+        55,
+        70,
+        34
+      ],
+      [
+        22,
+        86,
+        334
+      ]
+    ],
+    "classification_report": {
+      "Dropout": {
+        "precision": 0.7072243346007605,
+        "recall": 0.6549295774647887,
+        "f1-score": 0.680073126142596,
+        "support": 284.0
+      },
+      "Enrolled": {
+        "precision": 0.3211009174311927,
+        "recall": 0.44025157232704404,
+        "f1-score": 0.3713527851458886,
+        "support": 159.0
+      },
+      "Graduate": {
+        "precision": 0.8267326732673267,
+        "recall": 0.755656108597285,
+        "f1-score": 0.789598108747045,
+        "support": 442.0
+      },
+      "accuracy": 0.6666666666666666,
+      "macro avg": {
+        "precision": 0.6183526417664266,
+        "recall": 0.6169457527963726,
+        "f1-score": 0.6136746733451764,
+        "support": 885.0
+      },
+      "weighted avg": {
+        "precision": 0.6975396593020723,
+        "recall": 0.6666666666666666,
+        "f1-score": 0.6793087285072175,
+        "support": 885.0
+      }
+    }
+  },
+  "baseline_test": {
+    "dropout_recall": 0.0,
+    "macro_f1": 0.22205476011052497,
+    "confusion_matrix": [
+      [
+        0,
+        0,
+        284
+      ],
+      [
+        0,
+        0,
+        159
+      ],
+      [
+        0,
+        0,
+        442
+      ]
+    ],
+    "classification_report": {
+      "Dropout": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 284.0
+      },
+      "Enrolled": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 159.0
+      },
+      "Graduate": {
+        "precision": 0.4994350282485876,
+        "recall": 1.0,
+        "f1-score": 0.6661642803315749,
+        "support": 442.0
+      },
+      "accuracy": 0.4994350282485876,
+      "macro avg": {
+        "precision": 0.1664783427495292,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.22205476011052497,
+        "support": 885.0
+      },
+      "weighted avg": {
+        "precision": 0.24943534744166748,
+        "recall": 0.4994350282485876,
+        "f1-score": 0.33270577616560015,
+        "support": 885.0
+      }
+    }
+  },
+  "confusion_matrix_labels": [
+    "Dropout",
+    "Enrolled",
+    "Graduate"
+  ],
+  "confusion_matrix_orientation": "rows=actual; columns=predicted",
+  "tree": {
+    "depth": 6,
+    "leaves": 42
+  },
+  "runtime": {
+    "python": "3.9.6",
+    "scikit_learn": "1.6.1",
+    "numpy": "2.0.2"
+  },
+  "trained_at": "2026-11-17T02:33:13.998083+00:00",
+  "limitations": [
+    "External Portuguese university data; local performance has not been validated.",
+    "Outcomes are eventual Dropout/Enrolled/Graduate, not subject failure or causes.",
+    "Only end-of-first-semester inputs are supported; this is not an admission-time model.",
+    "Leaf class shares are not calibrated individual risk probabilities.",
+    "SETE and personnel decisions are outside this model."
+  ],
+  "artifacts": {
+    "joblib_sha256": "b71c616b3fbbd431404c9af49ca773c34d1515f21ebbea4659df415bdce246c8",
+    "tree_json_sha256": "d8a18929211549f6f7eb67107e18ce11814edec6ce1982619b289925e717b350"
+  }
+}

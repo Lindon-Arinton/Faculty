@@ -5,7 +5,7 @@ require_once __DIR__ . '/includes/icons.php';
 start_session();
 
 if (current_user()) {
-    header('Location: index.php');
+    header('Location: ' . home_for_user(current_user()));
     exit;
 }
 
@@ -27,8 +27,8 @@ try {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim((string) ($_POST['email'] ?? ''));
-    $password = (string) ($_POST['password'] ?? '');
+    $email = is_string($_POST['email'] ?? null) ? trim($_POST['email']) : '';
+    $password = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
 
     if (!verify_csrf($_POST['csrf'] ?? null)) {
         $error = 'Your session expired. Please try again.';
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
 
-            header('Location: index.php');
+            header('Location: ' . home_for_user($user));
             exit;
         }
 

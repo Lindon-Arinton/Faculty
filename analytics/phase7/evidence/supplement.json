@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "prepared_four_columns_and_target_match_original": true,
+  "cached_csv_matches_archive_member": true,
+  "csv_checksum_matches_saved_training_report": true,
+  "account_matches_original_precleanup_backup_all_fields": true,
+  "public_demo_sample_count": 12,
+  "public_demo_model_predictions": {
+    "Dropout": 5,
+    "Enrolled": 2,
+    "Graduate": 5
+  }
+}

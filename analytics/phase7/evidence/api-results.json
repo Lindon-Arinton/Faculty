@@ -1,0 +1,91 @@
+{
+  "status": "PASS",
+  "heldout_predictions_and_probabilities_matched": 885,
+  "checks": [
+    {
+      "test": "unauthenticated",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "test": "GET method",
+      "status": 405,
+      "expected": 405,
+      "pass": true
+    },
+    {
+      "test": "content type",
+      "status": 415,
+      "expected": 415,
+      "pass": true
+    },
+    {
+      "test": "invalid JSON",
+      "status": 400,
+      "expected": 400,
+      "pass": true
+    },
+    {
+      "test": "oversize",
+      "status": 413,
+      "expected": 413,
+      "pass": true
+    },
+    {
+      "test": "CSRF",
+      "status": 403,
+      "expected": 403,
+      "pass": true
+    },
+    {
+      "test": "missing",
+      "status": 422,
+      "expected": 422,
+      "pass": true
+    },
+    {
+      "test": "identity",
+      "status": 422,
+      "expected": 422,
+      "pass": true
+    },
+    {
+      "test": "second_semester",
+      "status": 422,
+      "expected": 422,
+      "pass": true
+    },
+    {
+      "test": "negative",
+      "status": 422,
+      "expected": 422,
+      "pass": true
+    },
+    {
+      "test": "fractional_count",
+      "status": 422,
+      "expected": 422,
+      "pass": true
+    },
+    {
+      "test": "approved_exceeds_enrolled",
+      "status": 422,
+      "expected": 422,
+      "pass": true
+    },
+    {
+      "test": "range",
+      "status": 422,
+      "expected": 422,
+      "pass": true
+    },
+    {
+      "test": "type",
+      "status": 422,
+      "expected": 422,
+      "pass": true
+    }
+  ],
+  "model_unavailable_503": "NOT VERIFIED in Phase 7: requires modifying artifact/service state; historical Phase 6 simulated test exists."
+}

@@ -1,0 +1,124 @@
+|--- Curricular units 1st sem (approved) <= 4.50
+|   |--- Curricular units 1st sem (approved) <= 2.50
+|   |   |--- Curricular units 1st sem (enrolled) <= 0.50
+|   |   |   |--- class: Dropout
+|   |   |--- Curricular units 1st sem (enrolled) >  0.50
+|   |   |   |--- Curricular units 1st sem (evaluations) <= 5.50
+|   |   |   |   |--- Curricular units 1st sem (evaluations) <= 1.50
+|   |   |   |   |   |--- class: Dropout
+|   |   |   |   |--- Curricular units 1st sem (evaluations) >  1.50
+|   |   |   |   |   |--- class: Dropout
+|   |   |   |--- Curricular units 1st sem (evaluations) >  5.50
+|   |   |   |   |--- Curricular units 1st sem (grade) <= 9.90
+|   |   |   |   |   |--- Curricular units 1st sem (evaluations) <= 9.50
+|   |   |   |   |   |   |--- class: Dropout
+|   |   |   |   |   |--- Curricular units 1st sem (evaluations) >  9.50
+|   |   |   |   |   |   |--- class: Dropout
+|   |   |   |   |--- Curricular units 1st sem (grade) >  9.90
+|   |   |   |   |   |--- Curricular units 1st sem (enrolled) <= 5.50
+|   |   |   |   |   |   |--- class: Dropout
+|   |   |   |   |   |--- Curricular units 1st sem (enrolled) >  5.50
+|   |   |   |   |   |   |--- class: Dropout
+|   |--- Curricular units 1st sem (approved) >  2.50
+|   |   |--- Curricular units 1st sem (enrolled) <= 5.50
+|   |   |   |--- Curricular units 1st sem (grade) <= 12.71
+|   |   |   |   |--- Curricular units 1st sem (approved) <= 3.50
+|   |   |   |   |   |--- Curricular units 1st sem (evaluations) <= 8.50
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |   |--- Curricular units 1st sem (evaluations) >  8.50
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |--- Curricular units 1st sem (approved) >  3.50
+|   |   |   |   |   |--- Curricular units 1st sem (grade) <= 11.32
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |   |--- Curricular units 1st sem (grade) >  11.32
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |--- Curricular units 1st sem (grade) >  12.71
+|   |   |   |   |--- class: Enrolled
+|   |   |--- Curricular units 1st sem (enrolled) >  5.50
+|   |   |   |--- Curricular units 1st sem (evaluations) <= 9.50
+|   |   |   |   |--- Curricular units 1st sem (grade) <= 12.12
+|   |   |   |   |   |--- class: Dropout
+|   |   |   |   |--- Curricular units 1st sem (grade) >  12.12
+|   |   |   |   |   |--- class: Dropout
+|   |   |   |--- Curricular units 1st sem (evaluations) >  9.50
+|   |   |   |   |--- Curricular units 1st sem (evaluations) <= 12.50
+|   |   |   |   |   |--- Curricular units 1st sem (approved) <= 3.50
+|   |   |   |   |   |   |--- class: Dropout
+|   |   |   |   |   |--- Curricular units 1st sem (approved) >  3.50
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |--- Curricular units 1st sem (evaluations) >  12.50
+|   |   |   |   |   |--- class: Dropout
+|--- Curricular units 1st sem (approved) >  4.50
+|   |--- Curricular units 1st sem (approved) <= 5.50
+|   |   |--- Curricular units 1st sem (enrolled) <= 5.50
+|   |   |   |--- Curricular units 1st sem (grade) <= 12.31
+|   |   |   |   |--- Curricular units 1st sem (evaluations) <= 6.50
+|   |   |   |   |   |--- class: Graduate
+|   |   |   |   |--- Curricular units 1st sem (evaluations) >  6.50
+|   |   |   |   |   |--- class: Enrolled
+|   |   |   |--- Curricular units 1st sem (grade) >  12.31
+|   |   |   |   |--- Curricular units 1st sem (grade) <= 13.92
+|   |   |   |   |   |--- Curricular units 1st sem (grade) <= 13.08
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |   |--- Curricular units 1st sem (grade) >  13.08
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |--- Curricular units 1st sem (grade) >  13.92
+|   |   |   |   |   |--- class: Graduate
+|   |   |--- Curricular units 1st sem (enrolled) >  5.50
+|   |   |   |--- Curricular units 1st sem (grade) <= 12.30
+|   |   |   |   |--- Curricular units 1st sem (grade) <= 11.88
+|   |   |   |   |   |--- Curricular units 1st sem (grade) <= 11.24
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |   |--- Curricular units 1st sem (grade) >  11.24
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |--- Curricular units 1st sem (grade) >  11.88
+|   |   |   |   |   |--- class: Dropout
+|   |   |   |--- Curricular units 1st sem (grade) >  12.30
+|   |   |   |   |--- Curricular units 1st sem (evaluations) <= 9.50
+|   |   |   |   |   |--- Curricular units 1st sem (grade) <= 12.93
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |   |--- Curricular units 1st sem (grade) >  12.93
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |--- Curricular units 1st sem (evaluations) >  9.50
+|   |   |   |   |   |--- class: Enrolled
+|   |--- Curricular units 1st sem (approved) >  5.50
+|   |   |--- Curricular units 1st sem (grade) <= 12.72
+|   |   |   |--- Curricular units 1st sem (evaluations) <= 9.50
+|   |   |   |   |--- Curricular units 1st sem (approved) <= 6.50
+|   |   |   |   |   |--- Curricular units 1st sem (grade) <= 12.18
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |   |--- Curricular units 1st sem (grade) >  12.18
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |--- Curricular units 1st sem (approved) >  6.50
+|   |   |   |   |   |--- class: Graduate
+|   |   |   |--- Curricular units 1st sem (evaluations) >  9.50
+|   |   |   |   |--- Curricular units 1st sem (enrolled) <= 13.50
+|   |   |   |   |   |--- Curricular units 1st sem (evaluations) <= 11.50
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |   |--- Curricular units 1st sem (evaluations) >  11.50
+|   |   |   |   |   |   |--- class: Enrolled
+|   |   |   |   |--- Curricular units 1st sem (enrolled) >  13.50
+|   |   |   |   |   |--- class: Graduate
+|   |   |--- Curricular units 1st sem (grade) >  12.72
+|   |   |   |--- Curricular units 1st sem (grade) <= 13.57
+|   |   |   |   |--- Curricular units 1st sem (evaluations) <= 7.50
+|   |   |   |   |   |--- Curricular units 1st sem (grade) <= 13.17
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |   |--- Curricular units 1st sem (grade) >  13.17
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |--- Curricular units 1st sem (evaluations) >  7.50
+|   |   |   |   |   |--- Curricular units 1st sem (approved) <= 6.50
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |   |--- Curricular units 1st sem (approved) >  6.50
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |--- Curricular units 1st sem (grade) >  13.57
+|   |   |   |   |--- Curricular units 1st sem (evaluations) <= 8.50
+|   |   |   |   |   |--- Curricular units 1st sem (grade) <= 14.64
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |   |--- Curricular units 1st sem (grade) >  14.64
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |--- Curricular units 1st sem (evaluations) >  8.50
+|   |   |   |   |   |--- Curricular units 1st sem (grade) <= 14.24
+|   |   |   |   |   |   |--- class: Graduate
+|   |   |   |   |   |--- Curricular units 1st sem (grade) >  14.24
+|   |   |   |   |   |   |--- class: Graduate

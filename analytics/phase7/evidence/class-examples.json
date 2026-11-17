@@ -1,0 +1,77 @@
+[
+  {
+    "public_uci_row": 1718,
+    "features": {
+      "enrolled": 8.0,
+      "approved": 1.0,
+      "grade": 10.0,
+      "evaluations": 16.0
+    },
+    "actual_label": "Enrolled",
+    "response": {
+      "outcome": "Dropout",
+      "indicator": "Priority academic support",
+      "recommendation": "Invite the student for a supportive advising conversation. Review passed units, learning needs, and available tutoring or assistance; confirm the context before acting.",
+      "probabilities": {
+        "Dropout": 0.6895691017239327,
+        "Enrolled": 0.3046683976795605,
+        "Graduate": 0.005762500596506747
+      },
+      "demonstration": true,
+      "source": "UCI 697 external demonstration; not validated for local university students",
+      "prediction_time": "After the first semester",
+      "probability_note": "Uncalibrated tree leaf class shares, not validated individual risk probabilities",
+      "model_version": "e90e55fd65ec462ae283ebeb2cca409319e3460ed898d8754f62fb35cc83a65d:seed-405"
+    }
+  },
+  {
+    "public_uci_row": 2873,
+    "features": {
+      "enrolled": 10.0,
+      "approved": 6.0,
+      "grade": 10.666666666666666,
+      "evaluations": 15.0
+    },
+    "actual_label": "Enrolled",
+    "response": {
+      "outcome": "Enrolled",
+      "indicator": "Monitor academic progress",
+      "recommendation": "Review course completion and arrange a progress check with an adviser. The Enrolled outcome does not establish that the student is academically safe or will drop out.",
+      "probabilities": {
+        "Dropout": 0.25749020066809036,
+        "Enrolled": 0.493981481709143,
+        "Graduate": 0.24852831762276667
+      },
+      "demonstration": true,
+      "source": "UCI 697 external demonstration; not validated for local university students",
+      "prediction_time": "After the first semester",
+      "probability_note": "Uncalibrated tree leaf class shares, not validated individual risk probabilities",
+      "model_version": "e90e55fd65ec462ae283ebeb2cca409319e3460ed898d8754f62fb35cc83a65d:seed-405"
+    }
+  },
+  {
+    "public_uci_row": 4200,
+    "features": {
+      "enrolled": 8.0,
+      "approved": 7.0,
+      "grade": 12.744285714285716,
+      "evaluations": 8.0
+    },
+    "actual_label": "Graduate",
+    "response": {
+      "outcome": "Graduate",
+      "indicator": "Routine academic support",
+      "recommendation": "Continue routine advising and monitor progress. A predicted Graduate outcome is not a guarantee of graduation.",
+      "probabilities": {
+        "Dropout": 0.11737413126788246,
+        "Enrolled": 0.16512916307844833,
+        "Graduate": 0.7174967056536692
+      },
+      "demonstration": true,
+      "source": "UCI 697 external demonstration; not validated for local university students",
+      "prediction_time": "After the first semester",
+      "probability_note": "Uncalibrated tree leaf class shares, not validated individual risk probabilities",
+      "model_version": "e90e55fd65ec462ae283ebeb2cca409319e3460ed898d8754f62fb35cc83a65d:seed-405"
+    }
+  }
+]

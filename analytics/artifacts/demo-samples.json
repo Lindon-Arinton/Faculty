@@ -1,0 +1,110 @@
+[
+  {
+    "id": "UCI697-row-1479",
+    "features": {
+      "enrolled": 6.0,
+      "approved": 2.0,
+      "grade": 14.5,
+      "evaluations": 17.0
+    }
+  },
+  {
+    "id": "UCI697-row-473",
+    "features": {
+      "enrolled": 6.0,
+      "approved": 6.0,
+      "grade": 11.875,
+      "evaluations": 11.0
+    }
+  },
+  {
+    "id": "UCI697-row-1758",
+    "features": {
+      "enrolled": 6.0,
+      "approved": 3.0,
+      "grade": 12.666666666666666,
+      "evaluations": 10.0
+    }
+  },
+  {
+    "id": "UCI697-row-3291",
+    "features": {
+      "enrolled": 6.0,
+      "approved": 1.0,
+      "grade": 14.0,
+      "evaluations": 13.0
+    }
+  },
+  {
+    "id": "UCI697-row-2873",
+    "features": {
+      "enrolled": 10.0,
+      "approved": 6.0,
+      "grade": 10.666666666666666,
+      "evaluations": 15.0
+    }
+  },
+  {
+    "id": "UCI697-row-1718",
+    "features": {
+      "enrolled": 8.0,
+      "approved": 1.0,
+      "grade": 10.0,
+      "evaluations": 16.0
+    }
+  },
+  {
+    "id": "UCI697-row-3647",
+    "features": {
+      "enrolled": 6.0,
+      "approved": 3.0,
+      "grade": 11.75,
+      "evaluations": 11.0
+    }
+  },
+  {
+    "id": "UCI697-row-823",
+    "features": {
+      "enrolled": 7.0,
+      "approved": 6.0,
+      "grade": 14.714285714285714,
+      "evaluations": 9.0
+    }
+  },
+  {
+    "id": "UCI697-row-4200",
+    "features": {
+      "enrolled": 8.0,
+      "approved": 7.0,
+      "grade": 12.744285714285716,
+      "evaluations": 8.0
+    }
+  },
+  {
+    "id": "UCI697-row-4115",
+    "features": {
+      "enrolled": 6.0,
+      "approved": 6.0,
+      "grade": 14.333333333333334,
+      "evaluations": 6.0
+    }
+  },
+  {
+    "id": "UCI697-row-1657",
+    "features": {
+      "enrolled": 5.0,
+      "approved": 5.0,
+      "grade": 13.4,
+      "evaluations": 6.0
+    }
+  },
+  {
+    "id": "UCI697-row-1060",
+    "features": {
+      "enrolled": 8.0,
+      "approved": 7.0,
+      "grade": 12.685714285714283,
+      "evaluations": 8.0
+    }
+  }
+]

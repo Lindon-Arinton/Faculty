@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "inserted_records": 16736,
+  "inserted_per_table": {
+    "terms": 3,
+    "colleges": 4,
+    "faculty": 32,
+    "rooms": 16,
+    "courses": 64,
+    "programs": 8,
+    "curriculum": 128,
+    "students": 768,
+    "sections": 320,
+    "meetings": 320,
+    "enrollments": 7680,
+    "evaluation_responses": 6264,
+    "faculty_rating_history": 64,
+    "interventions": 64,
+    "risk_snapshots": 36,
+    "applicants": 160,
+    "applicant_requirements": 800,
+    "meta": 5
+  },
+  "kpis": [
+    {
+      "label": "Active classes",
+      "value": "128"
+    },
+    {
+      "label": "Enrolled students",
+      "value": "768"
+    },
+    {
+      "label": "Grades pending",
+      "value": "64"
+    },
+    {
+      "label": "At-risk students",
+      "value": "96"
+    },
+    {
+      "label": "SETE average score",
+      "value": "4.14"
+    }
+  ],
+  "database_checks": 142,
+  "browser_page_viewport_checks": 54,
+  "browser_interaction_checks": 204,
+  "apache_http_checks": 71,
+  "screenshots": 70,
+  "model_retrained": false,
+  "model_artifacts_and_uci_source_unchanged": true,
+  "original_account_unchanged": true,
+  "foreign_key_orphans": 0,
+  "schedule_collisions": 0,
+  "other_databases_modified": false,
+  "snapshot": "2026-11-17 09:30:00 Asia/Manila",
+  "print_pdf_pages": 1,
+  "print_pdf_page_size_points": [
+    612,
+    936
+  ]
+}

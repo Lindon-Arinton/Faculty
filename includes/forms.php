@@ -39,6 +39,10 @@ function input(string $name, array $attrs = []): string
 /** $options = [value => label] or [group => [value => label]]. A list (0,1,2…) uses the label as the value. */
 function select_input(string $name, array $options, array $attrs = [], ?string $blank = null): string
 {
+    if (!$options) {
+        $attrs['disabled'] = true;
+        $blank = 'Setup required: no options available';
+    }
     $render = function (array $opts) {
         $html = '';
         $isList = array_is_list($opts);
@@ -86,6 +90,12 @@ function modal_end(string $submit = 'Save'): string
 /** Button that opens a modal. With $fill it opens in "edit" mode with those values. */
 function modal_button(string $modal, string $label, string $class = 'btn btn--primary btn--sm', ?array $fill = null, string $title = '', string $aria = ''): string
 {
+    $action = ['applicantModal' => 'applicant_save', 'studentModal' => 'student_save', 'facultyModal' => 'faculty_save', 'classModal' => 'section_save', 'interventionModal' => 'intervention_save'][$modal] ?? '';
+    if ($action !== '' && is_historical_term()) return '';
+    if ($action !== '' && !can(action_permission($action))) return '';
+    if ($action !== '' && setup_missing_for_action($action)) {
+        return '<span class="muted small">Setup required before adding records</span>';
+    }
     return '<button type="button" class="' . e($class) . '" data-modal="' . e($modal) . '"'
         . ($fill !== null ? ' data-fill="' . e(json_encode($fill, JSON_UNESCAPED_UNICODE)) . '"' : '')
         . ($title !== '' ? ' data-title="' . e($title) . '"' : '')
@@ -95,6 +105,8 @@ function modal_button(string $modal, string $label, string $class = 'btn btn--pr
 /** Button that asks "are you sure?" and then posts a delete to actions.php. */
 function confirm_button(string $action, int|string $id, string $text, string $label = '', string $class = 'icon-btn icon-btn--danger', array $extra = [], string $return = '', string $aria = 'Delete'): string
 {
+    if (is_historical_term()) return '';
+    if (!can(action_permission($action))) return '';
     return '<button type="button" class="' . e($class) . '" data-confirm="' . e($action) . '" data-id="' . e((string) $id) . '" data-text="' . e($text) . '"'
         . ($extra ? ' data-extra="' . e(json_encode($extra)) . '"' : '')
         . ' data-return="' . e($return !== '' ? $return : return_url()) . '" aria-label="' . e($aria) . '" title="' . e($aria) . '">'

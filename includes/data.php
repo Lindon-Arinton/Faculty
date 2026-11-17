@@ -14,7 +14,8 @@ $studentsAll = array_values(array_filter(students(), $inScope));
 $applicantsAll = array_values(array_filter(applicants(), $inScope));
 $classesAll = array_values(array_filter(classes(), $inScope));
 $riskAll = array_values(array_filter(at_risk(), $inScope));
-$facultyAll = array_values(array_filter(evaluated_faculty(), $inScope));
+$facultyScope = array_values(array_filter(faculty(), $inScope));
+$facultyAll = array_values(array_filter($facultyScope, fn($f) => $f['responses'] > 0));
 $scopeColleges = $collegeFilter ? [$collegeFilter => colleges()[$collegeFilter]] : colleges();
 $collegeQs = $collegeFilter ? 'college=' . urlencode($collegeFilter) : '';
 
@@ -64,13 +65,15 @@ if (!$collegeFilter) {
 }
 $gradeByCollege = array_slice($gradeByCollege, 0, 3);
 
+$hasCurrentTerm = (int) current_term()['id'] > 0;
+$hasRiskEvidence = grade_evidence_count($collegeFilter) > 0 || count($riskAll) > 0;
 $urgent = count(array_filter($riskAll, fn($r) => $r['priority'] === 'Urgent'));
 
 $stats = [
-    ['label' => 'Active classes',    'value' => number_format(count($classesAll)),  'note' => $collegeFilter ? 'Class sections this term' : 'Across ' . count(colleges()) . ' colleges', 'icon' => 'calendar', 'tone' => 'blue', 'href' => 'schedule.php' . ($collegeQs ? "?$collegeQs" : '')],
-    ['label' => 'Enrolled students', 'value' => number_format(count($studentsAll)), 'note' => $collegeFilter ? 'College enrollment' : 'School-wide enrollment', 'icon' => 'users', 'tone' => 'purple', 'href' => 'enrollment.php' . ($collegeQs ? "?$collegeQs" : '')],
-    ['label' => 'Grades pending',    'value' => number_format($gradesPending),      'note' => 'Classes not submitted', 'icon' => 'check-sq', 'tone' => 'orange', 'href' => 'grades.php?status=pending' . ($collegeQs ? "&$collegeQs" : '')],
-    ['label' => 'At-risk students',  'value' => number_format(count($riskAll)),     'note' => $urgent . ' need urgent attention', 'icon' => 'alert', 'tone' => 'red', 'href' => 'at-risk.php' . ($collegeQs ? "?$collegeQs" : '')],
+    ['label' => 'Active classes',    'value' => number_format(count($classesAll)),  'note' => !$hasCurrentTerm ? 'No active term configured' : ($collegeFilter ? 'Class sections this term' : 'Across ' . count(colleges()) . ' colleges'), 'icon' => 'calendar', 'tone' => 'blue', 'href' => 'schedule.php' . ($collegeQs ? "?$collegeQs" : '')],
+    ['label' => 'Enrolled students', 'value' => number_format(count($studentsAll)), 'note' => !$studentsAll ? 'No student records loaded' : ($collegeFilter ? 'College enrollment' : 'School-wide enrollment'), 'icon' => 'users', 'tone' => 'purple', 'href' => 'enrollment.php' . ($collegeQs ? "?$collegeQs" : '')],
+    ['label' => 'Grades pending',    'value' => $classesAll ? number_format($gradesPending) : '—', 'note' => $classesAll ? 'Classes not submitted' : 'No class sections to assess', 'icon' => 'check-sq', 'tone' => 'orange', 'href' => 'grades.php?status=pending' . ($collegeQs ? "&$collegeQs" : '')],
+    ['label' => 'At-risk students',  'value' => $hasRiskEvidence ? number_format(count($riskAll)) : '—', 'note' => $hasRiskEvidence ? $urgent . ' need urgent attention' : 'No grade or backlog evidence', 'icon' => 'alert', 'tone' => 'red', 'href' => 'at-risk.php' . ($collegeQs ? "?$collegeQs" : '')],
 ];
 
 $riskTrend = risk_history($collegeFilter);
@@ -87,10 +90,10 @@ $prevIntake = (int) meta('prev_intake_applications', '0');
 
 $admissions = [
     ['label' => 'Total applications', 'value' => number_format($appTotal),
-     'note' => $collegeFilter ? pct($appTotal, count(applicants())) . '% of all applications' : pct($appTotal - $prevIntake, $prevIntake, 1) . '% from last intake', 'up' => !$collegeFilter],
-    ['label' => 'For review',         'value' => number_format($forReview),   'note' => pct($forReview, $appTotal) . '% awaiting exam results'],
-    ['label' => 'Qualified',          'value' => number_format($qualified),   'note' => pct($qualified, $examined) . '% of examinees passed'],
-    ['label' => 'Fully enrolled',     'value' => number_format($enrolledNew), 'note' => pct($enrolledNew, $qualified) . '% of qualified students'],
+     'note' => $collegeFilter ? pct($appTotal, count(applicants())) . '% of all applications' : ($prevIntake ? pct($appTotal - $prevIntake, $prevIntake, 1) . '% from last intake' : 'No prior intake baseline'), 'up' => !$collegeFilter && $prevIntake > 0],
+    ['label' => 'For review',         'value' => number_format($forReview),   'note' => $appTotal ? pct($forReview, $appTotal) . '% awaiting exam results' : 'No applications recorded'],
+    ['label' => 'Qualified',          'value' => number_format($qualified),   'note' => $examined ? pct($qualified, $examined) . '% of examinees passed' : 'No examined applications'],
+    ['label' => 'Fully enrolled',     'value' => number_format($enrolledNew), 'note' => $qualified ? pct($enrolledNew, $qualified) . '% of qualified students' : 'No qualified applications'],
 ];
 
 $pipeline = [
@@ -132,6 +135,27 @@ $evaluations = array_slice($evaluations, 0, 4);
 $responses = array_sum(array_column($facultyAll, 'responses'));
 $evalSummary = [
     ['value' => number_format(count($facultyAll)), 'label' => 'Faculty evaluated'],
-    ['value' => number_format($responses ? array_sum(array_map(fn($f) => $f['rating'] * $f['responses'], $facultyAll)) / $responses : 0, 2), 'label' => 'Average rating'],
-    ['value' => pct($responses, array_sum(array_column($facultyAll, 'enrolled'))) . '%', 'label' => 'Response rate'],
+    ['value' => ($responses ? number_format(array_sum(array_map(fn($f) => $f['rating'] * $f['responses'], $facultyAll)) / $responses, 2) : '—'), 'label' => 'Average rating'],
+    ['value' => array_sum(array_column($facultyScope, 'enrolled')) ? pct($responses, array_sum(array_column($facultyScope, 'enrolled'))) . '%' : '—', 'label' => 'Response rate'],
 ];
+
+// Fifth institutional KPI; external UCI examples never enter these figures.
+$seteAverage = $responses ? array_sum(array_map(fn($f) => $f['rating'] * $f['responses'], $facultyAll)) / $responses : null;
+$stats[] = ['label'=>'SETE average score', 'value'=>$seteAverage === null ? '—' : number_format($seteAverage, 2),
+    'note'=>$responses ? number_format($responses) . ' responses · out of 5' : 'No evaluation responses',
+    'icon'=>'star', 'tone'=>'green', 'href'=>'evaluations.php' . ($collegeQs ? "?$collegeQs" : '')];
+$seteCategories = [];
+foreach (EVAL_CATEGORIES as $label) {
+    $seteCategories[$label] = $responses ? round(array_sum(array_map(fn($f) => $f['categories'][$label] * $f['responses'], $facultyAll)) / $responses, 2) : 0;
+}
+// Proposed case-study warning thresholds, not adopted institutional policy.
+$dashboardWarnings = [];
+if ($classesAll && $hasCurrentTerm && $daysToDeadline < 0 && $gradesPending > 0) {
+    $dashboardWarnings[] = ['label'=>'Overdue grade submissions', 'text'=>"$gradesPending class sections remain unsubmitted after the grade deadline. Contact the responsible faculty."];
+}
+if ($seteAverage !== null && $seteAverage < 3.5 && $responses >= 30) {
+    $dashboardWarnings[] = ['label'=>'Review teaching support needs', 'text'=>'The SETE average is below the proposed 3.5/5 review threshold with at least 30 responses. Check participation, course context and other evidence before acting.'];
+}
+
+// Historical grades are context for review, not fresh operational alerts.
+if (is_historical_term()) $dashboardWarnings=[];

@@ -1,0 +1,334 @@
+{
+  "tables": {
+    "applicant_requirements": {
+      "rows": 800,
+      "matches_phase6_final": true,
+      "data_sha256": "ca8ec2b00058cafec4392117c5c1f40c911ce1a77da7609d64fd3419140f2a21",
+      "phase6_inserted": 800
+    },
+    "applicants": {
+      "rows": 160,
+      "matches_phase6_final": true,
+      "data_sha256": "246e8976d493eb46b87e9564c102d27e51e9f9e444d19afa3931e0216ee941fe",
+      "phase6_inserted": 160
+    },
+    "colleges": {
+      "rows": 4,
+      "matches_phase6_final": true,
+      "data_sha256": "d0ac69a25e8e8c599df3dbf5cfcdebe1f48464b39bf2d6c208a689315d7cb95a",
+      "phase6_inserted": 4
+    },
+    "courses": {
+      "rows": 64,
+      "matches_phase6_final": true,
+      "data_sha256": "10a2bc0afe1b2101152804a81e8db18b24288f92e0f051fe4915c2cabd8fa3d5",
+      "phase6_inserted": 64
+    },
+    "curriculum": {
+      "rows": 128,
+      "matches_phase6_final": true,
+      "data_sha256": "77dcba8d44c6f796e5bb8e9960bec29756f6e773ce6337c68da351cc74c2affe",
+      "phase6_inserted": 128
+    },
+    "enrollments": {
+      "rows": 7680,
+      "matches_phase6_final": true,
+      "data_sha256": "60624acde18403fc34e8059613416967e6f3b1c49f04d0c5d4d088a42852f19c",
+      "phase6_inserted": 7680
+    },
+    "evaluation_responses": {
+      "rows": 6264,
+      "matches_phase6_final": true,
+      "data_sha256": "d6f56dce240ada3a4581e6865857540248c1c22709f9ec53d7f3a3b2fbb6136f",
+      "phase6_inserted": 6264
+    },
+    "faculty": {
+      "rows": 32,
+      "matches_phase6_final": true,
+      "data_sha256": "511b28665950df9a413aa29f0433100bbf8f5717d6a3330899222d0de00a2cd3",
+      "phase6_inserted": 32
+    },
+    "faculty_rating_history": {
+      "rows": 64,
+      "matches_phase6_final": true,
+      "data_sha256": "d21f9774e6a345bb6aee2234f022af536214f785ff74ed8b8260486a5ab7159a",
+      "phase6_inserted": 64
+    },
+    "interventions": {
+      "rows": 64,
+      "matches_phase6_final": true,
+      "data_sha256": "d909a2f88302e4c33371c0451dccc176b9468d4bb86500dfcec6547796c1c03c",
+      "phase6_inserted": 64
+    },
+    "meetings": {
+      "rows": 320,
+      "matches_phase6_final": true,
+      "data_sha256": "2b0f48f8985f1fa5b9e164ad0c80ff43a30d0e90eb397dd5df030b75db587ad5",
+      "phase6_inserted": 320
+    },
+    "meta": {
+      "rows": 6,
+      "matches_phase6_final": true,
+      "data_sha256": "303ff02d9dddf63483ff0bf3c56207294584eb1cef6b3d2e4d1c1c7bad1bcc74",
+      "phase6_inserted": 5
+    },
+    "programs": {
+      "rows": 8,
+      "matches_phase6_final": true,
+      "data_sha256": "de30f6c294c3b17feec56650889c160c85c97d0dd9ba4f14fd3e7d74a5d5a9de",
+      "phase6_inserted": 8
+    },
+    "risk_snapshots": {
+      "rows": 36,
+      "matches_phase6_final": true,
+      "data_sha256": "6366f7be37f5bc20ae649362bffcdfc90ab65116a2ff42eeca3ba792e88d18e5",
+      "phase6_inserted": 36
+    },
+    "rooms": {
+      "rows": 16,
+      "matches_phase6_final": true,
+      "data_sha256": "ce659ee9aa1466d39fc7430361e07b0beb9799a1b4c5c5547dcd434bd6dc4e0c",
+      "phase6_inserted": 16
+    },
+    "sections": {
+      "rows": 320,
+      "matches_phase6_final": true,
+      "data_sha256": "b639f5fd071fdef0739ae5406f399123adf4bb8de539189107951c5f8e0b8c30",
+      "phase6_inserted": 320
+    },
+    "students": {
+      "rows": 768,
+      "matches_phase6_final": true,
+      "data_sha256": "f9ebd6b1538746509cb4ebed45fe8380364c2812cbf77ee4c63fa7382d6cd334",
+      "phase6_inserted": 768
+    },
+    "terms": {
+      "rows": 3,
+      "matches_phase6_final": true,
+      "data_sha256": "298681d098a022f9845e92c348ad47e1c637ea52c9e593f4a90cc89d335c58cf",
+      "phase6_inserted": 3
+    },
+    "users": {
+      "rows": 1,
+      "matches_phase6_final": true,
+      "data_sha256": "aed4c9eea8cd043269d8dc0ab04e1371d4dd83a5d6f611af85a8c135c05833ab",
+      "phase6_inserted": 0
+    }
+  },
+  "total_rows": 16738,
+  "inserted": 16736,
+  "account_matches_prepopulation": true,
+  "foreign_keys": [
+    {
+      "TABLE_NAME": "applicants",
+      "COLUMN_NAME": "program_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "programs",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "applicants_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "applicant_requirements",
+      "COLUMN_NAME": "applicant_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "applicants",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "applicant_requirements_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "courses",
+      "COLUMN_NAME": "college_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "colleges",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "courses_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "curriculum",
+      "COLUMN_NAME": "program_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "programs",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "curriculum_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "curriculum",
+      "COLUMN_NAME": "course_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "courses",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "curriculum_ibfk_2",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "enrollments",
+      "COLUMN_NAME": "section_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "sections",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "enrollments_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "enrollments",
+      "COLUMN_NAME": "student_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "students",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "enrollments_ibfk_2",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "evaluation_responses",
+      "COLUMN_NAME": "section_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "sections",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "evaluation_responses_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "faculty",
+      "COLUMN_NAME": "college_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "colleges",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "faculty_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "faculty_rating_history",
+      "COLUMN_NAME": "faculty_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "faculty",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "faculty_rating_history_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "faculty_rating_history",
+      "COLUMN_NAME": "term_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "terms",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "faculty_rating_history_ibfk_2",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "interventions",
+      "COLUMN_NAME": "student_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "students",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "interventions_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "meetings",
+      "COLUMN_NAME": "section_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "sections",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "meetings_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "meetings",
+      "COLUMN_NAME": "room_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "rooms",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "meetings_ibfk_2",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "programs",
+      "COLUMN_NAME": "college_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "colleges",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "programs_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "risk_snapshots",
+      "COLUMN_NAME": "college_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "colleges",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "risk_snapshots_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "rooms",
+      "COLUMN_NAME": "college_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "colleges",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "rooms_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "sections",
+      "COLUMN_NAME": "term_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "terms",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "sections_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "sections",
+      "COLUMN_NAME": "course_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "courses",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "sections_ibfk_2",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "sections",
+      "COLUMN_NAME": "program_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "programs",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "sections_ibfk_3",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "sections",
+      "COLUMN_NAME": "faculty_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "faculty",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "sections_ibfk_4",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "students",
+      "COLUMN_NAME": "program_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "programs",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "students_ibfk_1",
+      "orphan_rows": 0
+    },
+    {
+      "TABLE_NAME": "students",
+      "COLUMN_NAME": "adviser_id",
+      "REFERENCED_TABLE_SCHEMA": "veritas_portal",
+      "REFERENCED_TABLE_NAME": "faculty",
+      "REFERENCED_COLUMN_NAME": "id",
+      "CONSTRAINT_NAME": "students_ibfk_2",
+      "orphan_rows": 0
+    }
+  ],
+  "quality_corrections": [
+    "Transferee GWA uses 1\u20135 scale",
+    "Applicant update timestamps follow requirements"
+  ]
+}

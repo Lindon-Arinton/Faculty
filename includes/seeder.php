@@ -230,6 +230,25 @@ function rng(int $seed): Random\Randomizer
     return new Random\Randomizer(new Random\Engine\Mt19937($seed));
 }
 
+/**
+ * Generates a floating-point random number using getInt().
+ * Compatible with PHP versions without native floating-point random support.
+ */
+function seed_random_float(
+    Random\Randomizer $r,
+    float $min = 0.0,
+    float $max = 1.0
+): float {
+    if ($max <= $min) {
+        return $min;
+    }
+
+    $scale = 1000000;
+    $value = $r->getInt(0, $scale) / $scale;
+
+    return $min + ($max - $min) * $value;
+}
+
 function pick(Random\Randomizer $r, array $items): mixed
 {
     $items = array_values($items);
@@ -239,7 +258,7 @@ function pick(Random\Randomizer $r, array $items): mixed
 /** Picks a key from [key => weight]. */
 function weighted(Random\Randomizer $r, array $weights): string|int
 {
-    $x = $r->getFloat(0, array_sum($weights));
+    $x = seed_random_float($r, 0, (float) array_sum($weights));
     foreach ($weights as $key => $w) {
         $x -= $w;
         if ($x <= 0) {
@@ -251,13 +270,15 @@ function weighted(Random\Randomizer $r, array $weights): string|int
 
 function chance(Random\Randomizer $r, float $p): bool
 {
-    return $r->getFloat(0, 1) < $p;
+    return seed_random_float($r) < $p;
 }
 
 function gauss(Random\Randomizer $r, float $mean = 0, float $sd = 1): float
 {
-    $u = max($r->getFloat(0, 1), 1e-9);
-    return $mean + $sd * sqrt(-2 * log($u)) * cos(2 * M_PI * $r->getFloat(0, 1));
+    $u1 = max(seed_random_float($r), 1e-9);
+    $u2 = seed_random_float($r);
+
+    return $mean + $sd * sqrt(-2 * log($u1)) * cos(2 * M_PI * $u2);
 }
 
 function clamp(float $v, float $lo, float $hi): float
@@ -307,18 +328,7 @@ const SEED_TABLES = [
 
 function seed_schema(PDO $pdo, bool $fresh): void
 {
-    if ($fresh) {
-        $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
-        foreach (SEED_TABLES as $t) {
-            $pdo->exec("DROP TABLE IF EXISTS `$t`");
-        }
-        $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
-    }
-    $sql = (string) file_get_contents(__DIR__ . '/../database/schema.sql');
-    $sql = preg_replace('/^\s*--.*$/m', '', $sql);
-    foreach (array_filter(array_map('trim', explode(';', $sql))) as $statement) {
-        $pdo->exec($statement);
-    }
+    throw new RuntimeException('Sample schema rebuilding is disabled for the case study.');
 }
 
 /* ------------------------------------------------------------------ */
@@ -327,6 +337,7 @@ function seed_schema(PDO $pdo, bool $fresh): void
 
 function seed_database(PDO $pdo, ?callable $log = null): array
 {
+    throw new RuntimeException('Sample seeding is disabled for the case study.');
     $log ??= fn(string $m) => null;
     $r = rng(SEED_RANDOM);
     $asOf = strtotime(SEED_AS_OF);
@@ -506,7 +517,7 @@ function seed_database(PDO $pdo, ?callable $log = null): array
                 'email' => strtolower(substr(seed_slug($first), 0, 1) . seed_slug($last)) . $fid . '@veritas.edu.ph',
                 'quality' => clamp(gauss($r, 4.35, 0.28), 3.1, 4.92),   // how students rate them
                 'strictness' => gauss($r, 0, 0.12),                     // grading tendency
-                'promptness' => $r->getFloat(0, 1),                     // how early they submit grades
+                'promptness' => seed_random_float($r, 0, 1),                     // how early they submit grades
             ];
         }
     }
@@ -565,7 +576,7 @@ function seed_database(PDO $pdo, ?callable $log = null): array
         foreach ($options as $o) {
             $start = $o[0][1];
             $pen = ($start >= 1020 ? 0.7 : 0) + ($start <= 420 ? 0.3 : 0) + (!$saturdayOk && $o[0][0] === 'Sat' ? 0.8 : 0);
-            $scored[] = [$r->getFloat(0, 1) + $pen, $o];
+            $scored[] = [seed_random_float($r, 0, 1) + $pen, $o];
         }
         usort($scored, fn($a, $b) => $a[0] <=> $b[0]);
         return array_column($scored, 1);
@@ -587,7 +598,7 @@ function seed_database(PDO $pdo, ?callable $log = null): array
         }
 
         $candidates = $facultyBy[$sec['college']];
-        usort($candidates, fn($a, $b) => ($faculty[$a]['load'] + $r->getFloat(0, 4)) <=> ($faculty[$b]['load'] + $r->getFloat(0, 4)));
+        usort($candidates, fn($a, $b) => ($faculty[$a]['load'] + seed_random_float($r, 0, 4)) <=> ($faculty[$b]['load'] + seed_random_float($r, 0, 4)));
         $withRoom = array_filter($candidates, fn($f) => $faculty[$f]['load'] + min(3, $sec['units']) <= $faculty[$f]['max']);
         $tryList = array_merge(array_values($withRoom), $candidates);
 
@@ -707,7 +718,7 @@ function seed_database(PDO $pdo, ?callable $log = null): array
         // Final-grade encoding progress depends on the instructor
         $pSub = clamp(0.42 + 0.52 * $f['promptness'], 0, 0.97);
         $state = chance($r, $pSub) ? 'Submitted' : (chance($r, 0.7) ? 'In progress' : 'Not started');
-        $encodedShare = $state === 'Submitted' ? 1 : ($state === 'In progress' ? $r->getFloat(0.15, 0.9) : 0);
+        $encodedShare = $state === 'Submitted' ? 1 : ($state === 'In progress' ? seed_random_float($r, 0.15, 0.9) : 0);
         $submittedAt = $state === 'Submitted' ? seed_time_between($r, $termEnd, $asOf - 1800) : null;
         $updatedAt = match ($state) {
             'Submitted'   => $submittedAt,
@@ -775,7 +786,7 @@ function seed_database(PDO $pdo, ?callable $log = null): array
     $rows = [];
     foreach (['2025-01-31' => 1.13, '2025-02-28' => 1.09, '2025-03-31' => 1.07, '2025-04-30' => 1.03] as $month => $factor) {
         foreach ($atRiskByCollege as $college => $n) {
-            $rows[] = [$month, $collegeId[$college], (int) round($n * $factor * $r->getFloat(0.97, 1.03))];
+            $rows[] = [$month, $collegeId[$college], (int) round($n * $factor * seed_random_float($r, 0.97, 1.03))];
         }
     }
     seed_insert($pdo, 'risk_snapshots', ['month', 'college_id', 'at_risk'], $rows);
@@ -807,7 +818,7 @@ function seed_database(PDO $pdo, ?callable $log = null): array
     $rows = [];
     foreach ($faculty as $id => $f) {
         if (empty($perFaculty[$id])) continue;
-        $rows[] = [$id, $previousTerm, round(clamp($f['quality'] + gauss($r, -0.04, 0.12), 2.5, 5), 2), (int) round($perFaculty[$id] * $r->getFloat(0.85, 1.1))];
+        $rows[] = [$id, $previousTerm, round(clamp($f['quality'] + gauss($r, -0.04, 0.12), 2.5, 5), 2), (int) round($perFaculty[$id] * seed_random_float($r, 0.85, 1.1))];
     }
     seed_insert($pdo, 'faculty_rating_history', ['faculty_id', 'term_id', 'rating', 'responses'], $rows);
 

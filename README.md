@@ -1,116 +1,115 @@
-# BSU Faculty Portal
+# BSU Student and Faculty Portal — BAT 405
 
-A web portal for a university faculty office. It tracks incoming applicants, enrolled students, the class schedule, grade submissions, at-risk students and faculty evaluations, with charts on every page.
+The existing PHP/MySQL portal now includes first-semester student outcome prediction using a trained scikit-learn Decision Tree, alongside enrollment, scheduling, grade monitoring, interventions and separate descriptive SETE reports.
 
-It is plain PHP and MySQL with no frameworks and nothing to install or build. It comes with a sample university (about 5,800 students, 1,000 classes and 3,200 applicants) that is created automatically the first time you open it.
+Open **http://localhost/Faculty/** and use your existing account. Existing accounts and credentials were preserved; the application no longer creates accounts, seeds records, creates databases or rebuilds schemas automatically.
 
-## What you need
+## Current Phase 6 demonstration
 
-- [XAMPP](https://www.apachefriends.org/) with **PHP 8.1 or newer** (developed and tested on PHP 8.5 with MariaDB 10.4)
-- A web browser
+**The dashboard is populated with DEMONSTRATION DATA.** [Phase 6 report](analytics/phase6/PHASE6_REPORT.md) documents 16,736 new fictional records, validated backups and rollback instructions. Current KPIs: **128 classes, 768 students, 64 pending submissions, 96 observed risk cases and 4.14/5 SETE**.
 
-Nothing else. There is no Composer or npm step.
+Academic year, semester and college filters now work; historical terms are read-only. The original account, trained model and UCI training source remain unchanged. Automatic seeding remains disabled. Open **http://localhost/Faculty/** or the [dashboard brief](http://localhost/Faculty/index.php?view=brief).
 
-## Set up
+## Prior Phase 5 QA and presentation
 
-1. **Put the project in XAMPP's web folder**, in a folder named `Faculty`:
+[Final QA report](analytics/qa/PHASE5_REPORT.md): 75 browser route/viewport checks, 249 browser interaction assertions, 178 backend checks and 71 actual Apache checks passed. Desktop, tablet and mobile screenshots are included. Source data, all account fields and original trained-model artifacts are unchanged.
 
-   ```
-   cd C:\xampp\htdocs
-   git clone https://github.com/Lindon-Arinton/Faculty.git
-   ```
+Open **http://localhost/Faculty/index.php?view=brief** for the optional one-page case-study brief; the full overview and existing navigation remain available. Phase 5 tested the intentionally empty source and isolated fixtures. Phase 6 subsequently populated the source explicitly and implemented year/semester filters. Physical devices, physical printing, department-specific scope and local model validity remain outside the verified capabilities.
 
-   Or download the ZIP from GitHub and extract it so that the files are in `C:\xampp\htdocs\Faculty`.
+## Current case-study database
 
-2. **Start Apache and MySQL** in the XAMPP Control Panel.
+The approved cleanup removed exactly **88,668 non-account records** from the LOCAL `veritas_portal` database. All 19 tables, indexes and foreign keys remain. The original user account remains unchanged. Phase 6 subsequently added 16,736 fictional demonstration records, including five provenance/snapshot metadata records; the original clean-state marker is retained. Academic data is now populated, and users are unchanged. Production was not changed.
 
-3. **Open the portal:** <http://localhost/Faculty/>
+The verified SQL backup, full restore audit, cleanup rehearsal, execution results and private test evidence are outside the web root in `/Users/johnlukereynon/Faculty-backups/bat405-20261117-approved/`. Do not expose this directory through Apache or commit its SQL files.
 
-4. **Sign in:**
+See [the implementation and testing report](analytics/IMPLEMENTATION_REPORT.md) for results and limitations, and [the original cleanup plan](database/cleanup-plan.md) for the approved deletion scope.
 
-   | Field | Value |
-   |---|---|
-   | Email | `facultyfaculty` |
-   | Password | `12345` |
+## Using the cleaned portal
 
-The first sign-in takes a few seconds longer than usual. During it the portal creates the `veritas_portal` database, its tables, the login account and all the sample records. You do not need to create a database or import anything yourself.
+1. Start Apache and MySQL in XAMPP. This installation uses PHP 8.2.4 and MariaDB 10.4.28.
+2. Sign in with the preserved account. No password reset is required.
+3. The overview displays the explicitly populated demonstration KPIs and a DEMONSTRATION DATA banner. Data is never generated automatically.
+4. An account with `University-wide access` can open **Reference setup** to enter actual colleges, programs, courses, rooms and an active term. Then use the existing faculty, applicant, student, class and grade forms. Adding reference records is an explicit administrator action.
+5. Open **Outcome prediction** to select an external UCI demonstration record or supply four compatible first-semester measurements. The dashboard also displays a separate summary of 12 external examples. These examples are never imported into student, enrollment, grade, intervention or SETE tables.
+6. SETE summaries remain on **Faculty evaluations**. With no responses, scores are unavailable rather than fabricated. Anonymous responses still link to sections, never student identities.
 
-## Settings
+`database/seed.php` and legacy seeder entry points are disabled. `database/veritas_portal.sql` is a historical sample export and must **not** be imported into the cleaned portal. Apache blocks direct downloads of database, model, test, tool and hidden files.
 
-All settings are in [`config.php`](config.php).
+## Authorization
 
-| Setting | Default | What it is |
-|---|---|---|
-| `DB_HOST`, `DB_USER`, `DB_PASS` | `127.0.0.1`, `root`, empty | MySQL connection. These are XAMPP's defaults; change them if your MySQL has a password. |
-| `DB_NAME` | `veritas_portal` | Database name. It is created if it does not exist. |
-| `APP_NAME` | `BSU` | Name shown in the sidebar, page titles and footer. |
-| `DEFAULT_USER_EMAIL`, `DEFAULT_USER_PASS` | `facultyfaculty`, `12345` | The login account, created only when the `users` table is empty. |
+Permissions are checked server-side on every protected page, mutation and prediction request. The persisted role is reloaded each request; editing a session role does not grant access. No roles or account records were changed.
 
-The logo is [`assets/img/logo.png`](assets/img/logo.png). Replace that file to change it.
-
-### Changing the login
-
-Editing `DEFAULT_USER_EMAIL` or `DEFAULT_USER_PASS` has no effect once the account exists. To apply new values, empty the `users` table in phpMyAdmin (<http://localhost/phpmyadmin>, database `veritas_portal`) and open the portal again; it recreates the account from `config.php`.
-
-## Using the portal
-
-| Page | What you can do |
+| Exact role | Access |
 |---|---|
-| Overview | See school-wide figures; filter everything by college |
-| Incoming enrollment | Add, edit and delete applicants and their submitted requirements |
-| Campus schedule | Add, edit and delete classes and their weekly meetings; see room conflicts |
-| Enrollment | Add, edit and delete students |
-| Grade submissions | Open a class to encode grades, save a draft, submit, or reopen |
-| At-risk students | Log, edit and delete interventions |
-| Faculty evaluations | Add, edit and delete faculty; view evaluation results |
+| `University-wide access` | Existing institutional pages, academic and faculty CRUD, reference setup, demonstration prediction |
+| `Academic Viewer` | Institutional/SETE pages and CSV exports, demonstration prediction; no mutations or setup |
+| `Faculty` | Public demonstration prediction only |
+| Any other role | Denied |
 
-- **Add** buttons are at the top right of each page. **Edit** (pencil) and **Delete** (bin) are at the end of each table row. Deleting always asks first.
-- **Charts** show exact figures on hover. Clicking a bar, donut slice or funnel step filters the list below; clicking a legend entry hides or shows that series.
-- **Export CSV** downloads the list as currently filtered.
-- **Search** with `Ctrl` + `K`. The **?** button at the bottom right opens a short guide.
+Only the first role exists in the source database. The other policies were tested with temporary accounts on the isolated verification copy. The schema has no account-to-faculty or department mapping; scoped access must be implemented explicitly before granting faculty/student-specific institutional access. New role names do not implicitly receive permissions.
 
-The portal treats **27 May 2025** as "today", because that is the date of the sample data. Records you add are dated that day.
+Authentication deliberately leaves all stored account fields unchanged, including password hashes and last-login metadata. Sessions, CSRF checks and existing login throttling remain active.
 
-## Sample data
+## Model and API
 
-| Task | How |
-|---|---|
-| Rebuild the sample records from scratch | `C:\xampp\php\php.exe database\seed.php` (run from the project folder) |
-| Load the ready-made copy instead | Import [`database/veritas_portal.sql`](database/veritas_portal.sql) into a database named `veritas_portal` in phpMyAdmin |
+The model uses UCI dataset 697, licensed CC BY 4.0, and exactly four first-semester variables: units enrolled, units approved, average grade and evaluations. Evaluation counts refer to academic assessments, not SETE. Curricular units are subjects, not credit hours. Source grades use 0–20; Philippine 1–5 grades cannot be directly substituted.
 
-Both of these **replace all records**, including anything you added or changed in the portal. Login accounts are kept.
+Training: fixed seed 405; stratified 80/20 split; 5-fold stratified cross-validation on training data; macro F1 model selection. The held-out test set has 885 records. Actual dropout recall is **65.49%** and macro F1 is **0.6137**. See [metrics.json](analytics/artifacts/metrics.json) for the full confusion matrix, class results and baseline.
 
-`database/schema.sql` holds the table definitions and is needed by the rebuild; do not delete it.
+The saved sklearn model is `analytics/artifacts/decision_tree.joblib`. PHP runs a checksum-verified JSON export of that same fitted tree; it does not start Python or deserialize pickle files. Inference agrees with sklearn for all 4,424 source rows and 51 floating-point threshold cases. Academic and SETE tables are never queried by the inference engine.
 
-## Troubleshooting
+`POST api/predict.php` requires an authenticated permitted session, JSON and the current CSRF token:
 
-| Problem | Fix |
-|---|---|
-| "Cannot reach the database" on the login page | MySQL is not running. Start it in the XAMPP Control Panel. |
-| Page not found | Check that the folder is `C:\xampp\htdocs\Faculty` and Apache is running. If Apache uses another port, add it: `http://localhost:8080/Faculty/`. |
-| Blank page or a PHP error mentioning `never` or `array_is_list` | PHP is older than 8.1. Install a newer XAMPP. |
-| "Too many failed attempts" | Wait 5 minutes, or close the browser to start a new session. |
-
-## Project layout
-
-```
-Faculty/
-├── config.php            Settings: database, name, default login
-├── login.php, logout.php Sign in and out
-├── index.php             Overview dashboard
-├── incoming.php          Applicants
-├── schedule.php          Class timetable
-├── enrollment.php        Students
-├── grades.php, class.php Grade submissions and each class's roster
-├── at-risk.php           At-risk students and interventions
-├── evaluations.php       Faculty and evaluation results
-├── search.php            Search across all records
-├── actions.php           Saves every add, edit and delete
-├── includes/             Shared code: database, queries, page shell, forms, charts, sample-data builder
-├── assets/               Styles, scripts and the logo
-└── database/             Table definitions, rebuild script, sample-data export
+```json
+{
+  "csrf": "current-session-token",
+  "features": {"enrolled": 6, "approved": 4, "grade": 12, "evaluations": 8}
+}
 ```
 
-## Before putting this online
+The API returns outcome, advisory support indicator, recommendations, uncalibrated leaf class shares and explicit demonstration provenance. It rejects extra feature names, student identifiers, invalid counts, unsupported grades, oversized requests and second-semester inputs. Predictions are not stored or automatically converted to interventions. The page also supports a server-rendered POST fallback.
 
-This is set up for a local machine. Before hosting it anywhere public, change the login in `config.php` to a strong password, give MySQL a password, and serve the site over HTTPS.
+## Reproduce training
+
+Keep the Python environment outside the web root. Runtime PHP inference needs no Python dependencies.
+
+```sh
+python3 -m venv /private/tmp/faculty-bat405-venv
+/private/tmp/faculty-bat405-venv/bin/python -m pip install -r analytics/requirements.txt
+/private/tmp/faculty-bat405-venv/bin/python analytics/train.py --download
+/private/tmp/faculty-bat405-venv/bin/python tests/model.py
+```
+
+The first download must come from the official UCI host. Its pinned checksum is recorded in `analytics/dataset-checksum.txt`; changed downloads stop training. Raw external data stays in `analytics/data/`, separately from institutional tables. `first-semester.csv` contains only the four selected predictors and target. Training artifacts and actual results are saved in `analytics/artifacts/`.
+
+## Verification tools
+
+```sh
+/Applications/XAMPP/xamppfiles/bin/php tests/unit.php
+/private/tmp/faculty-bat405-venv/bin/python tests/model.py
+python3 tests/source_smoke.py --demo
+/Applications/XAMPP/xamppfiles/bin/php tests/phase6_validate.php
+```
+
+`tests/source_smoke.py` checks actual LOCAL Apache routes, existing-account login, model API, private-file protection and unchanged database fingerprints. It does not insert or delete source records. It uses the configured existing credential without printing it; if the account credential differs, it stops rather than resetting anything.
+
+`tests/integration.py --database bat405_verify_<id> --output /private/tmp/test-results.json --with-model` requires a cleaned isolated verification schema. It creates clearly disposable test accounts and academic fixtures there, tests existing form workflows, then removes those fixtures. It refuses the source database. Test fixtures are never used for model-performance claims.
+
+`tools/database_audit.php` performs read-only audits without application initialization. `tools/backup_database.py` writes a private full backup, restores into a newly named verification schema and compares all table data/schema fingerprints. `tools/cleanup_database.php` defaults to dry run, validates the exact approved snapshot, requires passing rehearsal/tests for source execution, maintains foreign keys and runs explicit DELETE statements in one transaction. It will refuse another cleanup against the now-clean database.
+
+The cleanup tool's exclusive maintenance lock blocks application database requests during cleanup. Browser requests obtain shared locks. No table drops, truncations or disabled foreign keys are used.
+
+## Limits
+
+This is an external-data demonstration; the results do not validate predictions for this university. The model has limited ability to distinguish still-enrolled students and misses some eventual dropouts. Leaf shares are uncalibrated, and predictions are advisory. Collect compatible local first-semester measurements and eventual outcomes before local validation or deployment decisions. SETE remains a separate source of descriptive evidence and must not independently determine personnel actions.
+
+Phase 5 Playwright browser QA and the functional/model suites passed; see the final QA report for screenshots, per-requirement status and the remaining limitations. Physical devices and browser engines other than Chrome were not tested.
+
+
+## Phase 6 explicit data controls
+
+`tools/populate_demo.php` previews population by default. Only `--execute --confirm=veritas_portal` can insert, and an identical owned batch is a no-op. `--rollback` previews removal; `--rollback --execute --confirm=veritas_portal` deliberately returns to the clean state only if every owned fingerprint still matches. See the Phase 6 report before running it. No rollback was executed during presentation QA. Later edits cause these safeguards to stop rather than overwrite work.
+
+Pre-population and populated SQL backups are private in `/Users/johnlukereynon/Faculty-backups/bat405-phase6-prepopulation/`. Original accounts were never recreated or changed; only the approved local database was populated. New presentation entries should remain fictional and explicitly labeled.
+
+Run populated browser QA with `QA_STAGE=phase6 node tests/visual_qa.cjs`. The Phase 5 isolated fixture suite remains historical regression tooling and must not be run against the populated source; Phase 6 checks do not modify any other database.

@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/layout.php';
 
 $user = require_login();
+require_permission('academic.view', $user);
 
 $term = q('q');
 $groups = [];

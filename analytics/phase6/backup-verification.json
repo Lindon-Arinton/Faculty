@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "path": "/Users/johnlukereynon/Faculty-backups/bat405-phase6-prepopulation/veritas_portal-populated.sql",
+  "sha256": "00e624c03fae2176e689417cb1824e5d52e7d1b4094254ae879e14bb63cf4fa4",
+  "bytes": 2824410,
+  "rows": 16738,
+  "all_table_insert_counts_match": true,
+  "source_unchanged_during_backup": true,
+  "original_account_unchanged": true,
+  "original_model_artifacts_and_uci_dataset_unchanged": true,
+  "foreign_key_orphans": 0,
+  "other_databases_modified": false,
+  "all_19_table_structures_unchanged_except_normal_auto_increment_advancement": true
+}

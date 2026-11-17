@@ -29,7 +29,7 @@ function data_version(): string
     static $version = null;
     return $version ??= md5(json_encode(rows(
         'SELECT MAX(UPDATE_TIME) u, COUNT(*) n FROM information_schema.TABLES WHERE TABLE_SCHEMA = ?', [DB_NAME]
-    )) . filemtime(__FILE__));
+    )) . DB_NAME . current_term()['id'] . filemtime(__FILE__));
 }
 
 /** Stores a computed list in the temp folder until the data changes. */
@@ -70,11 +70,33 @@ function app_now(): int
     return $asOf ? strtotime($asOf) : time();
 }
 
+function academic_year(array $term): string
+{
+    $year=(int)substr($term['starts_on'],0,4); if ((int)substr($term['starts_on'],5,2)<6) $year--;
+    return $year . '-' . ($year+1);
+}
+function active_term(): array
+{
+    static $term=null;
+    return $term ??= rows('SELECT * FROM terms WHERE is_current=1 LIMIT 1')[0]
+        ?? ['id'=>0,'name'=>'No active term','starts_on'=>date('Y-m-d'),'ends_on'=>date('Y-m-d'),'grade_deadline'=>date('Y-m-d')];
+}
 function current_term(): array
 {
-    static $term = null;
-    return $term ??= rows('SELECT * FROM terms WHERE is_current = 1 LIMIT 1')[0]
-        ?? ['id' => 0, 'name' => 'No active term', 'starts_on' => date('Y-m-d'), 'ends_on' => date('Y-m-d'), 'grade_deadline' => date('Y-m-d')];
+    static $term=null;
+    if($term!==null)return $term;
+    $terms=rows('SELECT * FROM terms ORDER BY starts_on DESC');
+    $requested=isset($_GET['term'])&&is_string($_GET['term'])&&ctype_digit($_GET['term'])?(int)$_GET['term']:($_SESSION['academic_term']??active_term()['id']);
+    $ay=isset($_GET['ay'])&&is_string($_GET['ay'])?$_GET['ay']:'';
+    $scope=array_values(array_filter($terms,fn($t)=>$ay===''||academic_year($t)===$ay));
+    foreach($scope as$t)if((int)$t['id']===(int)$requested)$term=$t;
+    $term??=$scope[0]??active_term();
+    if(session_status()===PHP_SESSION_ACTIVE)$_SESSION['academic_term']=(int)$term['id'];
+    return $term;
+}
+function is_historical_term(): bool
+{
+    return (int)current_term()['id']!==(int)active_term()['id'];
 }
 
 function previous_term(): ?array
@@ -143,7 +165,7 @@ function build_students(): array
     $term = current_term()['id'];
     $list = [];
     foreach (rows(
-        'SELECT s.id, s.student_no, s.first_name, s.middle_name, s.last_name, s.sex, s.birthdate, s.email, s.year_level, s.block, s.status, s.back_subjects,
+        'SELECT s.id, s.student_no, s.first_name, s.middle_name, s.last_name, s.sex, s.birthdate, s.email, CASE WHEN ?=1 THEN COALESCE(u.historical_year,s.year_level) ELSE s.year_level END year_level, CASE WHEN ?=1 THEN COALESCE(u.historical_block,s.block) ELSE s.block END block, s.status, s.back_subjects,
                 UNIX_TIMESTAMP(s.enrolled_at) enrolled_at, p.code program, p.name program_name, c.short_name college,
                 CONCAT(f.title, " ", f.first_name, " ", f.last_name) adviser,
                 COALESCE(u.units, 0) units, COALESCE(u.subjects, 0) subjects
@@ -152,12 +174,13 @@ function build_students(): array
          JOIN colleges c ON c.id = p.college_id
          LEFT JOIN faculty f ON f.id = s.adviser_id
          LEFT JOIN (
-             SELECT e.student_id, SUM(co.units) units, COUNT(*) subjects
+             SELECT e.student_id, SUM(co.units) units, COUNT(*) subjects, MIN(x.year_level) historical_year, MIN(x.block) historical_block
              FROM enrollments e JOIN sections x ON x.id = e.section_id JOIN courses co ON co.id = x.course_id
              WHERE x.term_id = ? GROUP BY e.student_id
          ) u ON u.student_id = s.id
+         WHERE u.student_id IS NOT NULL OR ? = 1
          ORDER BY s.last_name, s.first_name, s.middle_name',
-        [$term]
+        [is_historical_term()?1:0, is_historical_term()?1:0, $term, is_historical_term()?0:1]
     ) as $s) {
         $list[] = [
             'sid'          => (int) $s['id'],
@@ -222,13 +245,14 @@ function build_at_risk(): array
              GROUP BY e.student_id
          ) g ON g.student_id = s.id
          LEFT JOIN interventions i ON i.student_id = s.id
-         WHERE g.failing > 0 OR g.inc > 0 OR (s.status = "Irregular" AND s.back_subjects >= ?)',
-        [current_term()['id'], RISK_BACK_SUBJECTS]
+         WHERE g.failing > 0 OR g.inc > 0 OR (s.status = "Irregular" AND s.back_subjects >= ? AND ? = 1)',
+        [current_term()['id'], RISK_BACK_SUBJECTS, is_historical_term()?0:1]
     ) as $row) {
+        if(!isset($byId[(int)$row['id']]))continue;
         $s = $byId[(int) $row['id']];
         $failing = (int) $row['failing'];
         $inc = (int) $row['inc'];
-        $back = (int) $row['back_subjects'];
+        $back = is_historical_term()?0:(int) $row['back_subjects'];
         $type = $failing ? 'Failing' : ($inc ? 'INC' : 'Behind curriculum');
         $details = [];
         if ($failing) $details[] = $failing . ' failing subject' . ($failing > 1 ? 's' : '');
@@ -242,8 +266,8 @@ function build_at_risk(): array
             'inc'          => $inc,
             'gwa'          => $row['gwa'] !== null ? round((float) $row['gwa'], 2) : null,
             'priority'     => ($failing >= 2 || ($failing && $inc) || $back >= 5) ? 'Urgent' : 'Monitor',
-            'intervention' => $row['intervention'] ?? 'Not contacted',
-            'last_contact' => $row['last_contact'] ? (int) $row['last_contact'] : null,
+            'intervention' => is_historical_term() ? 'Not archived for term' : ($row['intervention'] ?? 'Not contacted'),
+            'last_contact' => !is_historical_term() && $row['last_contact'] ? (int) $row['last_contact'] : null,
             'notes'        => $row['notes'],
         ];
     }
@@ -257,21 +281,35 @@ function at_risk_ids(): array
     return $ids ??= array_flip(array_column(at_risk(), 'id'));
 }
 
+/** Coverage check: no grades is unavailable evidence, not evidence of zero risk. */
+function grade_evidence_count(string $college = ''): int
+{
+    static $counts = [];
+    if (isset($counts[$college])) return $counts[$college];
+    $params = [current_term()['id']];
+    $where = '';
+    if ($college !== '') { $where = ' AND c.short_name = ?'; $params[] = $college; }
+    return $counts[$college] = (int) rows('SELECT COUNT(*) n FROM enrollments e
+        JOIN sections x ON x.id=e.section_id JOIN programs p ON p.id=x.program_id
+        JOIN colleges c ON c.id=p.college_id
+        WHERE x.term_id=? AND (e.midterm_grade IS NOT NULL OR e.final_grade IS NOT NULL)' . $where, $params)[0]['n'];
+}
+
 /** Month-end at-risk counts for the current term, plus the live count for this month. */
 function risk_history(string $college = ''): array
 {
-    $params = [];
-    $where = '';
+    $params = [current_term()['starts_on'],current_term()['ends_on']];
+    $where = 'WHERE r.month BETWEEN ? AND ?';
     if ($college !== '') {
-        $where = 'WHERE c.short_name = ?';
+        $where .= ' AND c.short_name = ?';
         $params[] = $college;
     }
     $out = [];
     foreach (rows("SELECT r.month, SUM(r.at_risk) n FROM risk_snapshots r JOIN colleges c ON c.id = r.college_id $where GROUP BY r.month ORDER BY r.month", $params) as $m) {
-        $out[date('M', strtotime($m['month']))] = (int) $m['n'];
+        $out[date('M Y', strtotime($m['month']))] = (int) $m['n'];
     }
     $live = count($college === '' ? at_risk() : array_filter(at_risk(), fn($r) => $r['college'] === $college));
-    $out[date('M', app_now())] = $live;
+    if ($live > 0 || grade_evidence_count($college) > 0) $out[date('M Y', is_historical_term()?strtotime(current_term()['ends_on']):app_now())] = $live;
     return $out;
 }
 
@@ -374,6 +412,7 @@ function build_faculty(): array
             'enrolled'   => (int) $f['invited'],
             'rating'     => $rating,
             'previous'   => $f['previous'] !== null ? (float) $f['previous'] : $rating,
+            'has_previous' => $f['previous'] !== null,
             'categories' => $categories,
         ];
     }
@@ -519,6 +558,7 @@ function build_room_conflicts(): array
               AND a.start_time < b.end_time AND b.start_time < a.end_time
          JOIN rooms r ON r.id = a.room_id
          JOIN sections x ON x.id = a.section_id
+         JOIN sections y ON y.id = b.section_id AND y.term_id=x.term_id
          WHERE x.term_id = ?
          ORDER BY FIELD(a.day, "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")',
         [current_term()['id']]
@@ -580,4 +620,30 @@ function room_choices(): array
 function count_for_review(): int
 {
     return (int) db()->query("SELECT COUNT(*) FROM applicants WHERE status = 'For review'")->fetchColumn();
+}
+
+/** Required reference catalogs; no fallback sample data is ever supplied. */
+function setup_missing(): array
+{
+    static $missing = null;
+    if ($missing !== null) return $missing;
+    $missing = [];
+    foreach (['colleges', 'programs', 'courses', 'rooms'] as $table) {
+        if (!(int) db()->query('SELECT COUNT(*) FROM `' . $table . '`')->fetchColumn()) $missing[] = $table;
+    }
+    if (!(int) current_term()['id']) $missing[] = 'active term';
+    return $missing;
+}
+
+function setup_missing_for_action(string $action): array
+{
+    $needed = match ($action) {
+        'applicant_save' => ['colleges', 'programs'],
+        'student_save' => ['colleges', 'programs', 'active term'],
+        'faculty_save' => ['colleges'],
+        'section_save' => ['colleges', 'programs', 'courses', 'rooms', 'active term'],
+        'grades_save', 'enrollment_add', 'enrollment_remove' => ['active term'],
+        default => [],
+    };
+    return array_values(array_intersect($needed, setup_missing()));
 }

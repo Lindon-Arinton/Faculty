@@ -1,0 +1,24 @@
+{
+  "status": "PASS_WITH_LIMITATIONS",
+  "source_browser_pages": 36,
+  "isolated_browser_pages": 39,
+  "browser_interaction_checks": 249,
+  "backend_integration_checks": 178,
+  "source_http_checks": 71,
+  "screenshots": 101,
+  "javascript_exceptions": 0,
+  "unexpected_http_failures": 0,
+  "unexpected_console_errors": 0,
+  "verified_cancelled_icon_requests": 2,
+  "source_database_unchanged": true,
+  "user_accounts_preserved": 1,
+  "model_artifacts_unchanged": true,
+  "model_dropout_recall": 0.6549295774647887,
+  "model_macro_f1": 0.6136746733451764,
+  "limitations": [
+    "Chromium viewport emulation; physical devices and other browser engines unverified.",
+    "Historical academic-year/semester switching and department filtering are not implemented.",
+    "Local academic data remains empty; production model accuracy is not established.",
+    "Physical printing, cover names and remote assessor access are not verified."
+  ]
+}

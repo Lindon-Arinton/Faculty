@@ -1,0 +1,7 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+analytics/data/*.zip
+analytics/data/*.csv
+analytics/data/*.json

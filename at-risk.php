@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/layout.php';
 
 $user = require_login();
+require_permission('academic.view', $user);
 
 $college = isset(colleges()[q('college')]) ? q('college') : '';
 $type = q('type');
@@ -62,7 +63,7 @@ $chipCounts = ['' => array_sum($typeCounts)] + $typeCounts;
 page_start('risk', 'At-risk students', $user);
 page_head(
     'At-risk students',
-    number_format($total) . ' students' . ($college ? ' in ' . e($college) : ' across all colleges') . ' who may need academic support',
+    (grade_evidence_count($college) === 0 && $total === 0 ? 'Risk assessment unavailable: no grade or backlog evidence. ' : '') . number_format($total) . ' observed cases' . ($college ? ' in ' . e($college) : ' across all colleges') . ' who may need academic support',
     '<form method="get" class="filters">' . select_filter('college', array_keys(colleges()), $college, 'All colleges') . '</form>' . export_button()
 );
 ?>
@@ -110,7 +111,7 @@ page_head(
                 <?= line_chart($trend, 'var(--red-500)', 120) ?>
             </div>
             <div class="card panel">
-                <div class="panel-head"><div><h2>Intervention status</h2><p class="muted small"><?= $notContacted ?> students not yet contacted</p></div></div>
+                <div class="panel-head"><div><h2>Intervention status</h2><p class="muted small"><?= is_historical_term() ? 'Historical intervention records are not archived by term' : $notContacted . ' students not yet contacted' ?></p></div></div>
                 <?= bar_list($interventions, null, 'number', 'orange block', array_combine(INTERVENTION_STATUSES, array_map(fn($s) => url_with(['intervention' => $s]) . '#list', INTERVENTION_STATUSES))) ?>
             </div>
         </div>
@@ -142,7 +143,7 @@ page_head(
                         <td class="nowrap"><div class="cell-stack"><strong class="text-<?= e(status_tone($r['type'])) ?>"><?= e($r['type']) ?></strong><span><?= e($r['detail']) ?></span></div></td>
                         <td><?= tag($r['priority']) ?></td>
                         <td class="nowrap"><?= e($r['adviser']) ?></td>
-                        <td><div class="cell-stack"><?= tag($r['intervention']) ?><span>Last contact: <?= e(days_ago($r['last_contact'])) ?></span></div></td>
+                        <td><div class="cell-stack"><?= tag($r['intervention']) ?><span><?= is_historical_term() ? 'No archived contact date' : 'Last contact: ' . e(days_ago($r['last_contact'])) ?></span></div></td>
                         <td><div class="row-actions">
                             <?php $logged = $r['intervention'] !== 'Not contacted'; ?>
                             <?= modal_button('interventionModal', icon('edit', 16), 'icon-btn', [

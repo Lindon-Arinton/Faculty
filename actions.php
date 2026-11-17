@@ -17,7 +17,7 @@ class InputError extends RuntimeException {}
 
 function back(): never
 {
-    $to = (string) ($_POST['return'] ?? '');
+    $to = is_string($_POST['return'] ?? null) ? $_POST['return'] : '';
     if (!preg_match('~^[a-z-]+\.php(\?[^\s#]*)?(#[\w-]*)?$~', $to)) {
         $to = 'index.php';
     }
@@ -528,10 +528,49 @@ function intervention_delete(): string
     return 'Intervention record deleted. The student is back to “Not contacted”.';
 }
 
+/** Minimal reference setup: real catalogs supplied by an authorized administrator. */
+function catalog_save(): string
+{
+    $kind = one_of('kind', ['college', 'program', 'course', 'room', 'term'], 'reference type');
+    $name = need('name', 'Name', $kind === 'term' ? 40 : ($kind === 'room' ? 40 : 100));
+    $collegeId = null;
+    if (in_array($kind, ['program', 'course', 'room'], true)) {
+        $collegeId = whole('college_id', 1, 255, 'College');
+        if (!value('SELECT id FROM colleges WHERE id=?', [$collegeId])) throw new InputError('Choose an existing college.');
+    }
+    db()->beginTransaction();
+    switch ($kind) {
+        case 'college':
+            run('INSERT INTO colleges (code,name,short_name,building) VALUES (?,?,?,?)',
+                [need('code', 'Code', 10), $name, need('short_name', 'Short name', 40), need('building', 'Building', 80)]);
+            break;
+        case 'program':
+            run('INSERT INTO programs (college_id,code,name) VALUES (?,?,?)', [$collegeId, need('code', 'Code', 20), $name]);
+            break;
+        case 'course':
+            run('INSERT INTO courses (college_id,code,title,units,kind) VALUES (?,?,?,?,?)',
+                [$collegeId, need('code', 'Code', 20), $name, whole('units', 1, 20, 'Units'), one_of('course_kind', ['Lecture','Lab','PE','NSTP','Practicum'], 'course kind')]);
+            break;
+        case 'room':
+            run('INSERT INTO rooms (college_id,name,type,capacity) VALUES (?,?,?,?)',
+                [$collegeId, $name, one_of('room_type', ['Lecture','Laboratory','Gym'], 'room type'), whole('capacity', 1, 1000, 'Capacity')]);
+            break;
+        case 'term':
+            $starts = date_in('starts_on', 'start date'); $ends = date_in('ends_on', 'end date');
+            $deadline = date_in('grade_deadline', 'grade deadline');
+            if ($starts > $ends || $deadline < $ends) throw new InputError('Term dates must be ordered; grade deadline must be on/after term end.');
+            run('UPDATE terms SET is_current=0');
+            run('INSERT INTO terms (name,starts_on,ends_on,grade_deadline,is_current) VALUES (?,?,?,?,1)', [$name,$starts,$ends,$deadline]);
+            break;
+    }
+    db()->commit();
+    return ucfirst($kind) . ' reference saved.';
+}
+
 /* ---------- Dispatch ---------- */
 
 const ACTIONS = [
-    'applicant_save', 'applicant_delete', 'student_save', 'student_delete', 'faculty_save', 'faculty_delete',
+    'catalog_save', 'applicant_save', 'applicant_delete', 'student_save', 'student_delete', 'faculty_save', 'faculty_delete',
     'section_save', 'section_delete', 'grades_save', 'enrollment_add', 'enrollment_remove',
     'intervention_save', 'intervention_delete',
 ];
@@ -550,7 +589,14 @@ if (!in_array($action, ACTIONS, true)) {
     back();
 }
 
+require_permission(action_permission($action), $user);
+
 try {
+    if(is_historical_term())throw new InputError('Historical terms are read-only. Select the current term before changing records.');
+    $missing = setup_missing_for_action($action);
+    if ($missing) {
+        throw new InputError('Setup required: ' . implode(', ', $missing) . '. Ask an administrator to configure the reference catalogs.');
+    }
     flash('ok', $action());
 } catch (InputError $ex) {
     if (db()->inTransaction()) {

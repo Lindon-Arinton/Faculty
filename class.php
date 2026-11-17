@@ -6,6 +6,7 @@
 require_once __DIR__ . '/includes/layout.php';
 
 $user = require_login();
+require_permission('academic.view', $user);
 
 const GRADE_OPTIONS = ['1.00', '1.25', '1.50', '1.75', '2.00', '2.25', '2.50', '2.75', '3.00', '5.00', 'INC', 'DRP'];
 
@@ -23,6 +24,7 @@ $roster = rows(
     [$class['id']]
 );
 $submitted = $class['grade'] === 'Submitted';
+$locked = $submitted || !can('academic.manage') || is_historical_term();
 $encoded = count(array_filter($roster, fn($r) => $r['final_grade'] !== null));
 
 maybe_export_csv($roster, [
@@ -97,7 +99,8 @@ page_start('grades', $class['key'], $user);
                         <p class="muted small"><?= $submitted ? 'Final grades are submitted and locked. Reopen to change them.' : 'Scale 1.00 (highest) to 3.00 (passing) · 5.00 failed · INC incomplete · DRP dropped' ?></p>
                     </div>
                     <div class="toolbar-form">
-                        <?php if ($submitted): ?>
+                        <?php if (!can('academic.manage') || is_historical_term()): ?><span class="muted small">Read-only access</span>
+                        <?php elseif ($submitted): ?>
                             <?= tag('Submitted') ?>
                             <button type="submit" name="do" value="reopen" class="btn btn--ghost btn--sm"><?= icon('edit', 16) ?> Reopen for editing</button>
                         <?php else: ?>
@@ -116,8 +119,8 @@ page_start('grades', $class['key'], $user);
                                 <td class="muted"><?= $i + 1 ?></td>
                                 <td><div class="cell-person"><?= avatar($name) ?><div><strong><?= e($r['last_name'] . ', ' . $r['first_name']) ?></strong><span><a class="link-plain" href="enrollment.php?q=<?= e(urlencode($r['student_no'])) ?>#list"><?= e($r['student_no']) ?></a></span></div></div></td>
                                 <td><?= tag($r['status']) ?></td>
-                                <td><?= $gradeSelect('mid[' . $r['id'] . ']', $r['midterm_grade'], $submitted) ?></td>
-                                <td><?= $gradeSelect('fin[' . $r['id'] . ']', $r['final_grade'], $submitted) ?></td>
+                                <td><?= $gradeSelect('mid[' . $r['id'] . ']', $r['midterm_grade'], $locked) ?></td>
+                                <td><?= $gradeSelect('fin[' . $r['id'] . ']', $r['final_grade'], $locked) ?></td>
                                 <td><div class="row-actions"><?= confirm_button('enrollment_remove', $class['id'], 'Remove ' . $name . ' from ' . $class['key'] . '? Their grades in this class are deleted.', '', 'icon-btn icon-btn--danger', ['student' => $r['id']], $self . '#list', 'Remove from class') ?></div></td>
                             </tr>
                         <?php endforeach; ?>
@@ -141,7 +144,7 @@ page_start('grades', $class['key'], $user);
                 <div class="panel-head"><div><h2>Final grade distribution</h2><p class="muted small">Number of students in each range</p></div></div>
                 <?= bar_list($buckets, null, 'number', 'purple') ?>
             </div>
-            <div class="card panel">
+            <?php if (can('academic.manage') && !is_historical_term()): ?><div class="card panel">
                 <div class="panel-head"><div><h2>Add a student</h2><p class="muted small">For irregular students taking this class</p></div></div>
                 <form method="post" action="actions.php" class="inline-form">
                     <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
@@ -151,7 +154,7 @@ page_start('grades', $class['key'], $user);
                     <input class="f-input" name="student_no" placeholder="Student no., e.g. 2023-10482" pattern="\d{4}-\d{5}" maxlength="12" required aria-label="Student number">
                     <button type="submit" class="btn btn--primary btn--sm"><?= icon('plus', 16) ?> Add</button>
                 </form>
-            </div>
+            </div><?php endif; ?>
         </div>
     </section>
     <?= class_modal() ?>

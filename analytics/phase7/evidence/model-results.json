@@ -1,0 +1,191 @@
+{
+  "status": "PASS",
+  "model_class": "sklearn.tree._classes.DecisionTreeClassifier",
+  "parameters": {
+    "ccp_alpha": 0.0,
+    "class_weight": "balanced",
+    "criterion": "gini",
+    "max_depth": 6,
+    "max_features": null,
+    "max_leaf_nodes": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 40,
+    "min_samples_split": 2,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": null,
+    "random_state": 405,
+    "splitter": "best"
+  },
+  "features": [
+    {
+      "key": "enrolled",
+      "column": "Curricular units 1st sem (enrolled)",
+      "label": "First-semester units enrolled",
+      "integer": true,
+      "min": 0.0,
+      "max": 26.0
+    },
+    {
+      "key": "approved",
+      "column": "Curricular units 1st sem (approved)",
+      "label": "First-semester units passed",
+      "integer": true,
+      "min": 0.0,
+      "max": 26.0
+    },
+    {
+      "key": "grade",
+      "column": "Curricular units 1st sem (grade)",
+      "label": "First-semester average grade",
+      "integer": false,
+      "min": 0.0,
+      "max": 18.875
+    },
+    {
+      "key": "evaluations",
+      "column": "Curricular units 1st sem (evaluations)",
+      "label": "First-semester evaluations",
+      "integer": true,
+      "min": 0.0,
+      "max": 45.0
+    }
+  ],
+  "classes": [
+    "Dropout",
+    "Enrolled",
+    "Graduate"
+  ],
+  "rows": 4424,
+  "columns": 37,
+  "missing": 0,
+  "full_duplicates": 0,
+  "class_counts": {
+    "Dropout": 1421,
+    "Graduate": 2209,
+    "Enrolled": 794
+  },
+  "train_rows": 3539,
+  "test_rows": 885,
+  "saved_split_reproduced": true,
+  "cv_folds": [
+    {
+      "train": 2831,
+      "validation": 708,
+      "validation_classes": {
+        "Enrolled": 127,
+        "Graduate": 353,
+        "Dropout": 228
+      }
+    },
+    {
+      "train": 2831,
+      "validation": 708,
+      "validation_classes": {
+        "Dropout": 228,
+        "Graduate": 353,
+        "Enrolled": 127
+      }
+    },
+    {
+      "train": 2831,
+      "validation": 708,
+      "validation_classes": {
+        "Dropout": 227,
+        "Graduate": 354,
+        "Enrolled": 127
+      }
+    },
+    {
+      "train": 2831,
+      "validation": 708,
+      "validation_classes": {
+        "Dropout": 227,
+        "Enrolled": 127,
+        "Graduate": 354
+      }
+    },
+    {
+      "train": 2832,
+      "validation": 707,
+      "validation_classes": {
+        "Graduate": 353,
+        "Dropout": 227,
+        "Enrolled": 127
+      }
+    }
+  ],
+  "cv_score_reproduced": false,
+  "cv_note": "No refitting permitted; historical selected scores remain saved training evidence only.",
+  "root_training_samples": 3539,
+  "nodes": 83,
+  "depth": 6,
+  "leaves": 42,
+  "test": {
+    "dropout_recall": 0.6549295774647887,
+    "macro_f1": 0.6136746733451764,
+    "confusion_matrix": [
+      [
+        186,
+        62,
+        36
+      ],
+      [
+        55,
+        70,
+        34
+      ],
+      [
+        22,
+        86,
+        334
+      ]
+    ],
+    "classification_report": {
+      "Dropout": {
+        "precision": 0.7072243346007605,
+        "recall": 0.6549295774647887,
+        "f1-score": 0.680073126142596,
+        "support": 284.0
+      },
+      "Enrolled": {
+        "precision": 0.3211009174311927,
+        "recall": 0.44025157232704404,
+        "f1-score": 0.3713527851458886,
+        "support": 159.0
+      },
+      "Graduate": {
+        "precision": 0.8267326732673267,
+        "recall": 0.755656108597285,
+        "f1-score": 0.789598108747045,
+        "support": 442.0
+      },
+      "accuracy": 0.6666666666666666,
+      "macro avg": {
+        "precision": 0.6183526417664266,
+        "recall": 0.6169457527963726,
+        "f1-score": 0.6136746733451764,
+        "support": 885.0
+      },
+      "weighted avg": {
+        "precision": 0.6975396593020723,
+        "recall": 0.6666666666666666,
+        "f1-score": 0.6793087285072175,
+        "support": 885.0
+      }
+    }
+  },
+  "php_parity_rows": 4424,
+  "threshold_cases": 51,
+  "test_feature_vectors_seen_in_train": 496,
+  "artifacts_sha256": {
+    "metrics.json": "83fe511c61e8050820868d1654e3ffb3907971b27090ce9157cf7adb48eec5bb",
+    "cleanup-summary.json": "988cc03dc9bdcb9eb2102f468976f1c68185261f3d8dfb4eb4f8a09b78442958",
+    "source-validation.json": "1e8f8ea7593fdb5e141cc9694dec92873dc280011f68ae9b9a854182d208504c",
+    "demo-samples.json": "86ff36ef14ed248fbc8c0b427cc81fa47f3a2aae577e9888eabd570ba158fcf3",
+    "integration-validation.json": "fa132438227e79344f56edb1c3eac5568a3d14bf4b40e5ebcd9833ef18cceece",
+    "validation.json": "ed3523f4c1de9c5579165113af76dd0ba7c68a8d164971446304cc33b31beb41",
+    "tree-rules.txt": "328e0869e1bddb3048d4479406e189ba79590270b04d01922aa84b71274e1c74",
+    "decision_tree.joblib": "b71c616b3fbbd431404c9af49ca773c34d1515f21ebbea4659df415bdce246c8",
+    "tree.json": "d8a18929211549f6f7eb67107e18ce11814edec6ce1982619b289925e717b350"
+  }
+}

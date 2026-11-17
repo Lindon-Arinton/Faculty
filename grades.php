@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/layout.php';
 
 $user = require_login();
+require_permission('academic.view', $user);
 
 
 $college = isset(colleges()[q('college')]) ? q('college') : '';
@@ -65,15 +66,15 @@ $chipCounts = ['' => array_sum(array_intersect_key($statusCounts, array_flip(['S
 page_start('grades', 'Grade submissions', $user);
 page_head(
     'Grade submissions',
-    'End-of-term encoding for ' . number_format($total) . ' class sections' . ($college ? ' in ' . e($college) : '') . ' · Deadline ' . e(date('l, F j', $deadline)),
+    'End-of-term encoding for ' . number_format($total) . ' class sections' . ($college ? ' in ' . e($college) : '') . ((int) current_term()['id'] ? ' · Deadline ' . e(date('l, F j', $deadline)) : ' · No active term or deadline configured'),
     '<form method="get" class="filters">' . select_filter('college', array_keys(colleges()), $college, 'All colleges') . '</form>' . export_button()
 );
 ?>
     <section class="grid grid-4">
-        <?= stat_card('Submitted', number_format($counts['Submitted']), pct($counts['Submitted'], $total) . '% of class sections', 'check-sq', 'green', url_with(['status' => 'Submitted']) . '#list') ?>
+        <?= stat_card('Submitted', number_format($counts['Submitted']), $total ? pct($counts['Submitted'], $total) . '% of class sections' : 'No class sections available', 'check-sq', 'green', url_with(['status' => 'Submitted']) . '#list') ?>
         <?= stat_card('In progress', number_format($counts['In progress']), 'Encoding started', 'clock', 'orange', url_with(['status' => 'In progress']) . '#list') ?>
         <?= stat_card('Not started', number_format($counts['Not started']), 'No grades encoded yet', 'alert', 'red', url_with(['status' => 'Not started']) . '#list') ?>
-        <?= stat_card('Days to deadline', (string) max(0, $daysLeft), number_format($studentsWaiting) . ' students waiting on grades', 'calendar', 'blue') ?>
+        <?= stat_card('Days to deadline', (int) current_term()['id'] ? (string) max(0, $daysLeft) : '—', (int) current_term()['id'] ? number_format($studentsWaiting) . ' students waiting on grades' : 'No active term configured', 'calendar', 'blue') ?>
     </section>
 
     <section class="grid grid-2-1">

@@ -1,0 +1,6 @@
+{
+    "status": "NO_OP",
+    "batch": "BAT405_DEMO_2026_V1",
+    "inserted": 0,
+    "reason": "Identical batch already exists; no duplicates"
+}

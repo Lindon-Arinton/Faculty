@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/layout.php';
 
 $user = require_login();
+require_permission('academic.view', $user);
 
 $all = applicants();
 $college = isset(colleges()[q('college')]) ? q('college') : '';

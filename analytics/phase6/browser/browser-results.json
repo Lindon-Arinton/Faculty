@@ -1,0 +1,1791 @@
+{
+  "stage": "phase6",
+  "browser": "158.0.8127.37",
+  "base": "http://localhost/Faculty/",
+  "pages": [
+    {
+      "viewport": 1440,
+      "route": "index.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/index.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-index.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "index.php?view=brief",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/index.php?view=brief",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-index-brief.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "incoming.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/incoming.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-incoming.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "schedule.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/schedule.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-schedule.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "enrollment.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/enrollment.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-enrollment.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "grades.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/grades.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-grades.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "at-risk.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/at-risk.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-at-risk.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "evaluations.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/evaluations.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-evaluations.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "setup.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/setup.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-setup.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "search.php?q=QA",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/search.php?q=QA",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-search.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "predictions.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/predictions.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-predictions.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "class.php?id=999999",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/grades.php",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-class.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "class.php?id=1235",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/class.php?id=1235",
+      "documentWidth": 1440,
+      "bodyWidth": 1440,
+      "overflow": [],
+      "screenshot": "screenshots/desktop-class-populated.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "enrollment.php [historical]",
+      "status": 200,
+      "documentWidth": 1440,
+      "screenshot": "screenshots/desktop-historical-enrollment.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "grades.php [historical]",
+      "status": 200,
+      "documentWidth": 1440,
+      "screenshot": "screenshots/desktop-historical-grades.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "at-risk.php [historical]",
+      "status": 200,
+      "documentWidth": 1440,
+      "screenshot": "screenshots/desktop-historical-at-risk.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "evaluations.php [historical]",
+      "status": 200,
+      "documentWidth": 1440,
+      "screenshot": "screenshots/desktop-historical-evaluations.png"
+    },
+    {
+      "viewport": 1440,
+      "route": "schedule.php [historical]",
+      "status": 200,
+      "documentWidth": 1440,
+      "screenshot": "screenshots/desktop-historical-schedule.png"
+    },
+    {
+      "viewport": 820,
+      "route": "index.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/index.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-index.png"
+    },
+    {
+      "viewport": 820,
+      "route": "index.php?view=brief",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/index.php?view=brief",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-index-brief.png"
+    },
+    {
+      "viewport": 820,
+      "route": "incoming.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/incoming.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-incoming.png"
+    },
+    {
+      "viewport": 820,
+      "route": "schedule.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/schedule.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-schedule.png"
+    },
+    {
+      "viewport": 820,
+      "route": "enrollment.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/enrollment.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-enrollment.png"
+    },
+    {
+      "viewport": 820,
+      "route": "grades.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/grades.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-grades.png"
+    },
+    {
+      "viewport": 820,
+      "route": "at-risk.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/at-risk.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-at-risk.png"
+    },
+    {
+      "viewport": 820,
+      "route": "evaluations.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/evaluations.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-evaluations.png"
+    },
+    {
+      "viewport": 820,
+      "route": "setup.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/setup.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-setup.png"
+    },
+    {
+      "viewport": 820,
+      "route": "search.php?q=QA",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/search.php?q=QA",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-search.png"
+    },
+    {
+      "viewport": 820,
+      "route": "predictions.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/predictions.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-predictions.png"
+    },
+    {
+      "viewport": 820,
+      "route": "class.php?id=999999",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/grades.php",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-class.png"
+    },
+    {
+      "viewport": 820,
+      "route": "class.php?id=1235",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/class.php?id=1235",
+      "documentWidth": 820,
+      "bodyWidth": 820,
+      "overflow": [],
+      "screenshot": "screenshots/tablet-class-populated.png"
+    },
+    {
+      "viewport": 820,
+      "route": "enrollment.php [historical]",
+      "status": 200,
+      "documentWidth": 820,
+      "screenshot": "screenshots/tablet-historical-enrollment.png"
+    },
+    {
+      "viewport": 820,
+      "route": "grades.php [historical]",
+      "status": 200,
+      "documentWidth": 820,
+      "screenshot": "screenshots/tablet-historical-grades.png"
+    },
+    {
+      "viewport": 820,
+      "route": "at-risk.php [historical]",
+      "status": 200,
+      "documentWidth": 820,
+      "screenshot": "screenshots/tablet-historical-at-risk.png"
+    },
+    {
+      "viewport": 820,
+      "route": "evaluations.php [historical]",
+      "status": 200,
+      "documentWidth": 820,
+      "screenshot": "screenshots/tablet-historical-evaluations.png"
+    },
+    {
+      "viewport": 820,
+      "route": "schedule.php [historical]",
+      "status": 200,
+      "documentWidth": 820,
+      "screenshot": "screenshots/tablet-historical-schedule.png"
+    },
+    {
+      "viewport": 390,
+      "route": "index.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/index.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [
+        {
+          "tag": "DIV",
+          "class": "split-col",
+          "text": "Enrollment pipeline\n                                Conversion from ap",
+          "width": 423
+        },
+        {
+          "tag": "DIV",
+          "class": "sub-head",
+          "text": "Enrollment pipeline\n                                Conversion from ap",
+          "width": 379
+        },
+        {
+          "tag": "SPAN",
+          "class": "conv",
+          "text": "20% overall conversion",
+          "width": 124
+        },
+        {
+          "tag": "DIV",
+          "class": "funnel",
+          "text": "Applications160\n                                \n                     ",
+          "width": 379
+        },
+        {
+          "tag": "DIV",
+          "class": "funnel-step funnel-p1",
+          "text": "Applications160",
+          "width": 379
+        },
+        {
+          "tag": "STRONG",
+          "class": "",
+          "text": "160",
+          "width": 19
+        },
+        {
+          "tag": "DIV",
+          "class": "notice",
+          "text": "32 applicants still have incomplete requirements\n                     ",
+          "width": 379
+        },
+        {
+          "tag": "A",
+          "class": "notice-link",
+          "text": "Review",
+          "width": 39
+        },
+        {
+          "tag": "DIV",
+          "class": "split-col",
+          "text": "Recent applicants\n                                Latest admissions ac",
+          "width": 423
+        },
+        {
+          "tag": "DIV",
+          "class": "sub-head",
+          "text": "Recent applicants\n                                Latest admissions ac",
+          "width": 379
+        },
+        {
+          "tag": "DIV",
+          "class": "chips",
+          "text": "All\n                                                            For re",
+          "width": 379
+        },
+        {
+          "tag": "UL",
+          "class": "list",
+          "text": "DA                                    \n                               ",
+          "width": 379
+        },
+        {
+          "tag": "LI",
+          "class": "list-row",
+          "text": "DA                                    \n                               ",
+          "width": 379
+        },
+        {
+          "tag": "svg",
+          "class": {},
+          "text": "",
+          "width": 16
+        },
+        {
+          "tag": "path",
+          "class": {},
+          "text": "",
+          "width": 4
+        },
+        {
+          "tag": "LI",
+          "class": "list-row",
+          "text": "DA                                    \n                               ",
+          "width": 379
+        }
+      ],
+      "screenshot": "screenshots/mobile-index.png"
+    },
+    {
+      "viewport": 390,
+      "route": "index.php?view=brief",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/index.php?view=brief",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-index-brief.png"
+    },
+    {
+      "viewport": 390,
+      "route": "incoming.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/incoming.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-incoming.png"
+    },
+    {
+      "viewport": 390,
+      "route": "schedule.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/schedule.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-schedule.png"
+    },
+    {
+      "viewport": 390,
+      "route": "enrollment.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/enrollment.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-enrollment.png"
+    },
+    {
+      "viewport": 390,
+      "route": "grades.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/grades.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-grades.png"
+    },
+    {
+      "viewport": 390,
+      "route": "at-risk.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/at-risk.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-at-risk.png"
+    },
+    {
+      "viewport": 390,
+      "route": "evaluations.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/evaluations.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-evaluations.png"
+    },
+    {
+      "viewport": 390,
+      "route": "setup.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/setup.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-setup.png"
+    },
+    {
+      "viewport": 390,
+      "route": "search.php?q=QA",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/search.php?q=QA",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-search.png"
+    },
+    {
+      "viewport": 390,
+      "route": "predictions.php",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/predictions.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-predictions.png"
+    },
+    {
+      "viewport": 390,
+      "route": "class.php?id=999999",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/grades.php",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-class.png"
+    },
+    {
+      "viewport": 390,
+      "route": "class.php?id=1235",
+      "status": 200,
+      "expected": false,
+      "url": "http://localhost/Faculty/class.php?id=1235",
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "overflow": [],
+      "screenshot": "screenshots/mobile-class-populated.png"
+    },
+    {
+      "viewport": 390,
+      "route": "enrollment.php [historical]",
+      "status": 200,
+      "documentWidth": 390,
+      "screenshot": "screenshots/mobile-historical-enrollment.png"
+    },
+    {
+      "viewport": 390,
+      "route": "grades.php [historical]",
+      "status": 200,
+      "documentWidth": 390,
+      "screenshot": "screenshots/mobile-historical-grades.png"
+    },
+    {
+      "viewport": 390,
+      "route": "at-risk.php [historical]",
+      "status": 200,
+      "documentWidth": 390,
+      "screenshot": "screenshots/mobile-historical-at-risk.png"
+    },
+    {
+      "viewport": 390,
+      "route": "evaluations.php [historical]",
+      "status": 200,
+      "documentWidth": 390,
+      "screenshot": "screenshots/mobile-historical-evaluations.png"
+    },
+    {
+      "viewport": 390,
+      "route": "schedule.php [historical]",
+      "status": 200,
+      "documentWidth": 390,
+      "screenshot": "screenshots/mobile-historical-schedule.png"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    {
+      "viewport": "desktop",
+      "route": "predictions.php",
+      "error": "Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "expected": true
+    },
+    {
+      "viewport": "desktop",
+      "route": "predictions.php",
+      "error": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "expected": true
+    },
+    {
+      "viewport": "tablet",
+      "route": "predictions.php",
+      "error": "Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "expected": true
+    },
+    {
+      "viewport": "tablet",
+      "route": "predictions.php",
+      "error": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "expected": true
+    },
+    {
+      "viewport": "mobile",
+      "route": "predictions.php",
+      "error": "Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)",
+      "expected": true
+    },
+    {
+      "viewport": "mobile",
+      "route": "predictions.php",
+      "error": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "expected": true
+    }
+  ],
+  "failedRequests": [
+    {
+      "viewport": "desktop",
+      "route": "schedule.php [historical]",
+      "url": "http://localhost/Faculty/enrollment.php?export=csv",
+      "error": "net::ERR_ABORTED",
+      "verifiedBrowserCancellation": true
+    },
+    {
+      "viewport": "tablet",
+      "route": "schedule.php [historical]",
+      "url": "http://localhost/Faculty/enrollment.php?export=csv",
+      "error": "net::ERR_ABORTED",
+      "verifiedBrowserCancellation": true
+    },
+    {
+      "viewport": "mobile",
+      "route": "schedule.php [historical]",
+      "url": "http://localhost/Faculty/enrollment.php?export=csv",
+      "error": "net::ERR_ABORTED",
+      "verifiedBrowserCancellation": true
+    }
+  ],
+  "httpFailures": [
+    {
+      "viewport": "desktop",
+      "route": "predictions.php",
+      "url": "http://localhost/Faculty/api/predict.php",
+      "status": 422,
+      "expected": true
+    },
+    {
+      "viewport": "desktop",
+      "route": "predictions.php",
+      "url": "http://localhost/Faculty/api/predict.php",
+      "status": 503,
+      "expected": true
+    },
+    {
+      "viewport": "tablet",
+      "route": "predictions.php",
+      "url": "http://localhost/Faculty/api/predict.php",
+      "status": 422,
+      "expected": true
+    },
+    {
+      "viewport": "tablet",
+      "route": "predictions.php",
+      "url": "http://localhost/Faculty/api/predict.php",
+      "status": 503,
+      "expected": true
+    },
+    {
+      "viewport": "mobile",
+      "route": "predictions.php",
+      "url": "http://localhost/Faculty/api/predict.php",
+      "status": 422,
+      "expected": true
+    },
+    {
+      "viewport": "mobile",
+      "route": "predictions.php",
+      "url": "http://localhost/Faculty/api/predict.php",
+      "status": 503,
+      "expected": true
+    }
+  ],
+  "interactions": [
+    {
+      "viewport": "desktop",
+      "name": "Five primary institutional KPI cards",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Three identified institutional visualizations/placeholders",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "A genuine setup or threshold warning is visible",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Global academic provenance label",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Current cohort from inserted rows",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Four populated college enrollment bars",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Populated grade submission chart",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Five populated SETE dimensions",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "College filter recalculates student KPI",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "College filter does not change independent UCI results",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Academic-year filter recalculates historical cohort",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Prior academic year has two semesters",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical semester has its own class count",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical risk trend does not append current-year point",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical queries have no runtime errors",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module renders: enrollment.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module has no PHP errors: enrollment.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module renders: grades.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module has no PHP errors: grades.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module renders: at-risk.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module has no PHP errors: at-risk.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module renders: evaluations.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module has no PHP errors: evaluations.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module renders: schedule.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical module has no PHP errors: schedule.php",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Historical mutations rejected server-side",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Current academic year restores current cohort",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Populated chart legend toggles",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Export filename marked demonstration",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Export rows labeled demonstration",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Populated enrollment form opens with references",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Scheduling form opens with populated references",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Scheduling form contains generated courses",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Academic intervention form opens for a generated case",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Faculty form loads generated teaching record",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "External predictions clearly separate from institutional KPIs",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Applicant chip interaction",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Help dialog opens",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Help dialog closes",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Saved demonstration sample for Dropout",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Dropout/enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Dropout/approved",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Dropout/grade",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Dropout/evaluations",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Browser classification matches saved model: Dropout",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Academic support recommendation: Dropout",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Saved demonstration sample for Enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Enrolled/enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Enrolled/approved",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Enrolled/grade",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Enrolled/evaluations",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Browser classification matches saved model: Enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Academic support recommendation: Enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Saved demonstration sample for Graduate",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Graduate/enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Graduate/approved",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Graduate/grade",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Sample input loaded: Graduate/evaluations",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Browser classification matches saved model: Graduate",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Academic support recommendation: Graduate",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Native grade-range validation",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Editing input clears stale prediction",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "API validation displayed in UI",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "API failure message displayed in UI",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Prediction button recovers after API failure",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Brief contains the five KPI cards",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "name": "Brief retains full features via optional full-overview link",
+      "pass": true
+    },
+    {
+      "viewport": "long-bond-print",
+      "name": "Brief fits printable long-bond height at 740px width",
+      "pass": true,
+      "height": 1170
+    },
+    {
+      "viewport": "tablet",
+      "name": "Five primary institutional KPI cards",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Three identified institutional visualizations/placeholders",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "A genuine setup or threshold warning is visible",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Global academic provenance label",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Current cohort from inserted rows",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Four populated college enrollment bars",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Populated grade submission chart",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Five populated SETE dimensions",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "College filter recalculates student KPI",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "College filter does not change independent UCI results",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Academic-year filter recalculates historical cohort",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Prior academic year has two semesters",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical semester has its own class count",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical risk trend does not append current-year point",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical queries have no runtime errors",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module renders: enrollment.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module has no PHP errors: enrollment.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module renders: grades.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module has no PHP errors: grades.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module renders: at-risk.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module has no PHP errors: at-risk.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module renders: evaluations.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module has no PHP errors: evaluations.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module renders: schedule.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical module has no PHP errors: schedule.php",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Historical mutations rejected server-side",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Current academic year restores current cohort",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Populated chart legend toggles",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Export filename marked demonstration",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Export rows labeled demonstration",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Populated enrollment form opens with references",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Scheduling form opens with populated references",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Scheduling form contains generated courses",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Academic intervention form opens for a generated case",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Faculty form loads generated teaching record",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "External predictions clearly separate from institutional KPIs",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Applicant chip interaction",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Help dialog opens",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Help dialog closes",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Saved demonstration sample for Dropout",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Dropout/enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Dropout/approved",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Dropout/grade",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Dropout/evaluations",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Browser classification matches saved model: Dropout",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Academic support recommendation: Dropout",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Saved demonstration sample for Enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Enrolled/enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Enrolled/approved",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Enrolled/grade",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Enrolled/evaluations",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Browser classification matches saved model: Enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Academic support recommendation: Enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Saved demonstration sample for Graduate",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Graduate/enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Graduate/approved",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Graduate/grade",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Sample input loaded: Graduate/evaluations",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Browser classification matches saved model: Graduate",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Academic support recommendation: Graduate",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Narrow confusion matrix scrolls to all outcome columns",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Native grade-range validation",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Editing input clears stale prediction",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "API validation displayed in UI",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "API failure message displayed in UI",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Prediction button recovers after API failure",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Mobile navigation opens",
+      "pass": true
+    },
+    {
+      "viewport": "tablet",
+      "name": "Mobile navigation closes",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Five primary institutional KPI cards",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Three identified institutional visualizations/placeholders",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "A genuine setup or threshold warning is visible",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Global academic provenance label",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Current cohort from inserted rows",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Four populated college enrollment bars",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Populated grade submission chart",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Five populated SETE dimensions",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "College filter recalculates student KPI",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "College filter does not change independent UCI results",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Academic-year filter recalculates historical cohort",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Prior academic year has two semesters",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical semester has its own class count",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical risk trend does not append current-year point",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical queries have no runtime errors",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module renders: enrollment.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module has no PHP errors: enrollment.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module renders: grades.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module has no PHP errors: grades.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module renders: at-risk.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module has no PHP errors: at-risk.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module renders: evaluations.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module has no PHP errors: evaluations.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module renders: schedule.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical module has no PHP errors: schedule.php",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Historical mutations rejected server-side",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Current academic year restores current cohort",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Populated chart legend toggles",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Export filename marked demonstration",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Export rows labeled demonstration",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Populated enrollment form opens with references",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Scheduling form opens with populated references",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Scheduling form contains generated courses",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Academic intervention form opens for a generated case",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Faculty form loads generated teaching record",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "External predictions clearly separate from institutional KPIs",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Applicant chip interaction",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Help dialog opens",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Help dialog closes",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Saved demonstration sample for Dropout",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Dropout/enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Dropout/approved",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Dropout/grade",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Dropout/evaluations",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Browser classification matches saved model: Dropout",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Academic support recommendation: Dropout",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Saved demonstration sample for Enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Enrolled/enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Enrolled/approved",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Enrolled/grade",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Enrolled/evaluations",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Browser classification matches saved model: Enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Academic support recommendation: Enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Saved demonstration sample for Graduate",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Graduate/enrolled",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Graduate/approved",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Graduate/grade",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Sample input loaded: Graduate/evaluations",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Browser classification matches saved model: Graduate",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Academic support recommendation: Graduate",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Narrow confusion matrix scrolls to all outcome columns",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Native grade-range validation",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Editing input clears stale prediction",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "API validation displayed in UI",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "API failure message displayed in UI",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Prediction button recovers after API failure",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Mobile navigation opens",
+      "pass": true
+    },
+    {
+      "viewport": "mobile",
+      "name": "Mobile navigation closes",
+      "pass": true
+    }
+  ],
+  "intentionalFaults": [
+    {
+      "viewport": "desktop",
+      "validationStatus": 422,
+      "simulatedServiceStatus": 503
+    },
+    {
+      "viewport": "tablet",
+      "validationStatus": 422,
+      "simulatedServiceStatus": 503
+    },
+    {
+      "viewport": "mobile",
+      "validationStatus": 422,
+      "simulatedServiceStatus": 503
+    }
+  ],
+  "verifiedDownloads": [
+    "http://localhost/Faculty/enrollment.php?export=csv",
+    "http://localhost/Faculty/enrollment.php?export=csv",
+    "http://localhost/Faculty/enrollment.php?export=csv"
+  ],
+  "cancelledIconChecks": [],
+  "status": "PASS"
+}
