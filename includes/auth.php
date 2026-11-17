@@ -40,7 +40,21 @@ function verify_csrf(?string $token): bool
 
 function current_user(): ?array
 {
-    return $_SESSION['user'] ?? null;
+    if (empty($_SESSION['user']['id'])) return null;
+    // Refresh permissions from the database; a stale session must not retain access.
+    $stmt = db()->prepare('SELECT id, name, email, role FROM users WHERE id = ? LIMIT 1');
+    $stmt->execute([(int) $_SESSION['user']['id']]);
+    $user = $stmt->fetch();
+    if (!$user || !is_academic_administrator($user)) {
+        unset($_SESSION['user']);
+        return null;
+    }
+    return $_SESSION['user'] = $user;
+}
+
+function is_academic_administrator(array $user): bool
+{
+    return ($user['role'] ?? '') === ROLE_ACADEMIC_ADMIN;
 }
 
 function require_login(): array
@@ -78,7 +92,7 @@ function attempt_login(string $email, string $password): ?array
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
-    if (!$user || !password_verify($password, $user['password_hash'])) {
+    if (!$user || !is_academic_administrator($user) || !password_verify($password, $user['password_hash'])) {
         return null;
     }
 

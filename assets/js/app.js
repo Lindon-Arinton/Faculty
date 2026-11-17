@@ -4,6 +4,54 @@
     var each = function (sel, fn, root) { Array.prototype.forEach.call((root || document).querySelectorAll(sel), fn); };
     var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // KPI drill-downs keep the dashboard visible behind a read-only list.
+    var kpiDialog = document.getElementById('kpiListModal');
+    var kpiBody = document.getElementById('kpiListBody');
+    var kpiRequest = null;
+    async function loadKpiList(url) {
+        if (kpiRequest) kpiRequest.abort();
+        kpiRequest = new AbortController();
+        var request = kpiRequest;
+        kpiBody.textContent = 'Loading records…';
+        document.getElementById('kpiListPage').href = url.href;
+        try {
+            var response = await fetch(url.href, { signal: request.signal, credentials: 'same-origin' });
+            if (!response.ok) throw new Error('Unable to load records');
+            var parsed = new DOMParser().parseFromString(await response.text(), 'text/html');
+            var list = parsed.querySelector(url.hash === '#conflicts' ? '#conflicts' : '#list');
+            if (!list) throw new Error('List unavailable. Open the full page to continue.');
+            // Editing stays on the full page where its forms and scripts are available.
+            each('script, form, button, [data-modal], [data-delete]', function (node) { node.remove(); }, list);
+            each('a', function (link) {
+                var target = new URL(link.getAttribute('href'), url);
+                link.href = target.href;
+                if (target.pathname === url.pathname && target.searchParams.has('p')) {
+                    link.dataset.kpiPage = 'true';
+                }
+            }, list);
+            if (request.signal.aborted) return;
+            kpiBody.replaceChildren(document.importNode(list, true));
+        } catch (error) {
+            if (error.name !== 'AbortError') kpiBody.textContent = error.message;
+        }
+    }
+    document.addEventListener('click', function (event) {
+        var card = event.target.closest('a.stat, a.kpi--link, .eval-stats a, a[data-kpi-page]');
+        if (!card || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        var url = new URL(card.getAttribute('href'), window.location.href);
+        if (url.origin !== window.location.origin) return;
+        event.preventDefault();
+        if (!card.hasAttribute('data-kpi-page')) {
+            var label = card.querySelector('.stat-label, .kpi-title, span');
+            document.getElementById('kpiListTitle').textContent = label ? label.textContent : 'Related records';
+        }
+        if (!kpiDialog.open) kpiDialog.showModal();
+        loadKpiList(url);
+    });
+    kpiDialog.addEventListener('close', function () {
+        if (kpiRequest) kpiRequest.abort();
+    });
+
     // ---------- Mobile sidebar ----------
     var sidebar = document.getElementById('sidebar');
     function setSidebar(open) { sidebar.classList.toggle('is-open', open); }
@@ -273,6 +321,9 @@
         tip.style.top = top + 'px';
     }
     function hideTip() { tip.hidden = true; }
+    document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape') hideTip();
+    });
 
     document.addEventListener('mousemove', function (ev) {
         var el = ev.target.closest && ev.target.closest('[data-tip]');

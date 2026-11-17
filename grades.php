@@ -73,7 +73,7 @@ page_head(
         <?= stat_card('Submitted', number_format($counts['Submitted']), pct($counts['Submitted'], $total) . '% of class sections', 'check-sq', 'green', url_with(['status' => 'Submitted']) . '#list') ?>
         <?= stat_card('In progress', number_format($counts['In progress']), 'Encoding started', 'clock', 'orange', url_with(['status' => 'In progress']) . '#list') ?>
         <?= stat_card('Not started', number_format($counts['Not started']), 'No grades encoded yet', 'alert', 'red', url_with(['status' => 'Not started']) . '#list') ?>
-        <?= stat_card('Days to deadline', (string) max(0, $daysLeft), number_format($studentsWaiting) . ' students waiting on grades', 'calendar', 'blue') ?>
+        <?= stat_card('Days to deadline', (string) max(0, $daysLeft), number_format($studentsWaiting) . ' students waiting on grades', 'calendar', 'blue', '#list') ?>
     </section>
 
     <section class="grid grid-2-1">

@@ -67,7 +67,7 @@ page_head(
 );
 ?>
     <section class="grid grid-4">
-        <?= stat_card('Enrolled students', number_format($total), ($college ? pct($total, count(students())) . '% of all students' : icon('arrow-up', 11) . ' ' . pct($total - (int) meta('prev_term_enrollment', '0'), (int) meta('prev_term_enrollment', '1'), 1) . '% from last term'), 'users', 'blue') ?>
+        <?= stat_card('Enrolled students', number_format($total), ($college ? pct($total, count(students())) . '% of all students' : icon('arrow-up', 11) . ' ' . pct($total - (int) meta('prev_term_enrollment', '0'), (int) meta('prev_term_enrollment', '1'), 1) . '% from last term'), 'users', 'blue', '#list') ?>
         <?= stat_card('Regular', number_format($counts['Regular'] ?? 0), pct($counts['Regular'] ?? 0, $total) . '% full curriculum load', 'check-sq', 'green', url_with(['status' => 'Regular']) . '#list') ?>
         <?= stat_card('Irregular', number_format($counts['Irregular'] ?? 0), pct($counts['Irregular'] ?? 0, $total) . '% reduced or mixed load', 'clock', 'orange', url_with(['status' => 'Irregular']) . '#list') ?>
         <?= stat_card('On leave', number_format($counts['On leave'] ?? 0), 'Average load ' . number_format($avgUnits, 1) . ' units', 'user-x', 'purple', url_with(['status' => 'On leave']) . '#list') ?>

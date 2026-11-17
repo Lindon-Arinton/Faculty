@@ -144,7 +144,7 @@ svg { flex-shrink: 0; }
 }
 .sidebar-user-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .sidebar-user-text strong { font-size: 14px; font-weight: 600; }
-.sidebar-user-text span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-user-text span { font-size: 12px; color: var(--muted); white-space: normal; overflow-wrap: anywhere; line-height: 1.4; }
 
 /* ---------- Avatars ---------- */
 .avatar {
@@ -497,6 +497,9 @@ svg { flex-shrink: 0; }
 .eval-left h2 { font-size: 24px; font-weight: 700; letter-spacing: -.025em; }
 .eval-left p { margin: 14px 0 24px; font-size: 13.5px; line-height: 1.6; color: rgba(255, 255, 255, .8); max-width: 420px; }
 .eval-stats { display: flex; gap: 36px; margin-top: 34px; }
+.eval-stats a { color: inherit; border-radius: 6px; }
+.eval-stats a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.eval-stats a:focus-visible, a.stat:focus-visible, .kpi--link:focus-visible { outline: 3px solid var(--blue-600); outline-offset: 4px; }
 .eval-stats strong { display: block; font-size: 26px; font-weight: 700; letter-spacing: -.02em; }
 .eval-stats span { font-size: 11.5px; color: rgba(255, 255, 255, .7); }
 .eval-right { padding: 22px 22px; background: rgba(255, 255, 255, .06); border-left: 1px solid rgba(255, 255, 255, .1); }
@@ -898,6 +901,9 @@ dialog.modal {
 }
 dialog.modal--sm { width: 440px; }
 dialog.modal--lg { width: 780px; }
+dialog.kpi-modal { width: min(1200px, calc(100vw - 32px)); }
+.kpi-modal .modal-body { min-height: 140px; max-height: 65vh; }
+.kpi-modal .modal-body > .card { box-shadow: none; border: 0; }
 dialog.modal::backdrop { background: rgba(15, 23, 42, .5); backdrop-filter: blur(3px); animation: fade .2s ease-out; }
 dialog.modal[open] .modal-card { animation: pop .22s cubic-bezier(.2, .9, .3, 1.2); }
 .modal-card {

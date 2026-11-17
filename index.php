@@ -64,7 +64,7 @@ page_start('overview', 'Overview', $user);
                 </div>
 
                 <div class="grid grid-3 kpis">
-                    <a class="kpi kpi--link" href="enrollment.php<?= $collegeQs ? '?' . e($collegeQs) : '' ?>">
+                    <a class="kpi kpi--link" data-tip="Enrollment breakdown|Student counts grouped by college, or by program within the selected college.|Click to view enrolled students" href="enrollment.php<?= $collegeQs ? '?' . e($collegeQs) : '' ?>">
                         <div class="kpi-head">
                             <span class="kpi-title"><?= e($breakdownLabel) ?></span>
                             <?php if ($enrollmentGrowth !== null): ?><span class="pill pill--green"><?= icon('arrow-up', 12) ?> <?= e((string) $enrollmentGrowth) ?>%</span><?php endif; ?>
@@ -81,7 +81,7 @@ page_start('overview', 'Overview', $user);
                         </ul>
                     </a>
 
-                    <a class="kpi kpi--link" href="<?= e($scoped('grades.php')) ?>">
+                    <a class="kpi kpi--link" data-tip="Grade submission rate|Submitted class sections divided by all class sections, multiplied by 100.|Click to view class submission statuses" href="<?= e($scoped('grades.php')) ?>">
                         <div class="kpi-head">
                             <span class="kpi-title">Grade submission rate</span>
                             <span class="pill pill--grey"><?= $daysToDeadline > 0 ? 'Due ' . e(date('M j', $deadline)) : 'Past due' ?></span>
@@ -91,7 +91,7 @@ page_start('overview', 'Overview', $user);
                         <div class="kpi-note tone-orange-soft"><?= icon('alert', 14) ?> <?= $gradesPending ?> classes still need final grades</div>
                     </a>
 
-                    <a class="kpi kpi--link" href="<?= e($scoped('at-risk.php')) ?>">
+                    <a class="kpi kpi--link" data-tip="At-risk student trend|Recorded academic-risk counts over time for the selected scope.|Click to view students needing academic support" href="<?= e($scoped('at-risk.php')) ?>">
                         <div class="kpi-head">
                             <span class="kpi-title">At-risk student trend</span>
                             <span class="pill pill--green"><?= icon('arrow-dn', 12) ?> <?= e((string) $trendChange) ?>%</span>
@@ -307,7 +307,7 @@ page_start('overview', 'Overview', $user);
                     <a href="<?= e($scoped('evaluations.php')) ?>" class="btn btn--white">View complete report <?= icon('chev-r', 16) ?></a>
                     <div class="eval-stats">
                         <?php foreach ($evalSummary as $es): ?>
-                            <div><strong><?= e($es['value']) ?></strong><span><?= e($es['label']) ?></span></div>
+                            <a href="<?= e($scoped('evaluations.php')) ?>#list" data-tip="<?= e($es['label']) ?>|Aggregate faculty evaluation results|Click to view the faculty list"><strong><?= e($es['value']) ?></strong><span><?= e($es['label']) ?></span></a>
                         <?php endforeach; ?>
                     </div>
                 </div>

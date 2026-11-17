@@ -42,7 +42,7 @@ function ensure_schema(PDO $pdo): void
             name          VARCHAR(120) NOT NULL,
             email         VARCHAR(190) NOT NULL UNIQUE,
             password_hash VARCHAR(255) NOT NULL,
-            role          VARCHAR(120) NOT NULL DEFAULT "Faculty",
+            role          VARCHAR(120) NOT NULL DEFAULT "Authorized Academic Administrator",
             last_login_at DATETIME NULL,
             created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
@@ -58,6 +58,10 @@ function ensure_schema(PDO $pdo): void
             DEFAULT_USER_ROLE,
         ]);
     }
+
+    // Migrate only the original demonstration administrator, not ordinary faculty accounts.
+    $legacy = $pdo->prepare("UPDATE users SET role = ?, name = ? WHERE email = ? AND name = 'Faculty Office' AND role IN ('Faculty', 'University-wide access')");
+    $legacy->execute([ROLE_ACADEMIC_ADMIN, DEFAULT_USER_NAME, DEFAULT_USER_EMAIL]);
 
     ensure_records($pdo);
 }

@@ -336,10 +336,12 @@ function line_chart(array $series, string $color = 'var(--red-500)', int $height
         . $dots . '</div><div class="line-labels">' . implode('', array_map(fn($l) => '<span>' . e((string) $l) . '</span>', $labels)) . '</div>';
 }
 
-function stat_card(string $label, string $value, string $note, string $icon, string $tone, ?string $href = null): string
+function stat_card(string $label, string $value, string $note, string $icon, string $tone, ?string $href = null, ?string $tooltip = null): string
 {
     $tag = $href ? 'a' : 'div';
-    return '<' . $tag . ' class="card stat"' . ($href ? ' href="' . e($href) . '"' : '') . '>'
+    $description = $tooltip ?? trim(html_entity_decode(strip_tags($note), ENT_QUOTES, 'UTF-8'));
+    $tip = $label . '|' . $description . ($href ? '|Click to view the matching records' : '');
+    return '<' . $tag . ' class="card stat" data-tip="' . e($tip) . '"' . ($href ? ' href="' . e($href) . '"' : ' tabindex="0"') . '>'
         . '<span class="stat-icon tone-' . e($tone) . '">' . icon($icon, 20) . '</span><div>'
         . '<div class="stat-label">' . e($label) . '</div><div class="stat-value">' . e($value) . '</div>'
         . '<div class="stat-note">' . $note . '</div></div></' . $tag . '>';

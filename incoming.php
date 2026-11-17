@@ -81,7 +81,7 @@ page_head(
 );
 ?>
     <section class="grid grid-4">
-        <?= stat_card('Total applications', number_format($total), $college ? pct($total, count($all)) . '% of all applications' : icon('arrow-up', 11) . ' ' . pct($total - (int) meta('prev_intake_applications', '0'), (int) meta('prev_intake_applications', '1'), 1) . '% from last intake', 'file', 'blue') ?>
+        <?= stat_card('Total applications', number_format($total), $college ? pct($total, count($all)) . '% of all applications' : icon('arrow-up', 11) . ' ' . pct($total - (int) meta('prev_intake_applications', '0'), (int) meta('prev_intake_applications', '1'), 1) . '% from last intake', 'file', 'blue', '#list') ?>
         <?= stat_card('For review', number_format($forReview), pct($forReview, $total) . '% of applications', 'clock', 'purple', url_with(['status' => 'For review'])) ?>
         <?= stat_card('Qualified', number_format($qualified), pct($qualified, $reviewed) . '% of examinees passed', 'check-sq', 'orange', url_with(['status' => 'Qualified'])) ?>
         <?= stat_card('Fully enrolled', number_format($enrolled), pct($enrolled, $qualified) . '% of qualified students', 'graduation', 'green', url_with(['status' => 'Enrolled'])) ?>

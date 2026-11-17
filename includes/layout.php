@@ -88,7 +88,7 @@ function page_start(string $active, string $title, array $user): void
 
         <div class="access-card">
             <div class="access-title"><?= icon('shield', 14) ?> School-wide access</div>
-            <p>Institutional records are role-protected and evaluation responses stay anonymous.</p>
+            <p>For authorized academic administrators. Individual evaluation responses stay anonymous.</p>
         </div>
 
         <div class="sidebar-user">
@@ -108,7 +108,6 @@ function page_start(string $active, string $title, array $user): void
             <form class="search" action="search.php" method="get" role="search">
                 <?= icon('search', 18) ?>
                 <input type="search" name="q" id="globalSearch" value="<?= e($searchValue) ?>" placeholder="Search school-wide records" autocomplete="off">
-                <kbd>Ctrl K</kbd>
             </form>
             <div class="topbar-actions">
                 <div class="menu-wrap">
@@ -170,7 +169,7 @@ function export_button(): string
 function page_end(): void
 {
     ?>
-            <footer class="foot muted xsmall">© <?= date('Y', app_now()) ?> <?= e(APP_NAME) ?> · Faculty Portal · <?= e(current_term()['name']) ?></footer>
+            <footer class="foot muted xsmall">© <?= date('Y', app_now()) ?> <?= e(APP_NAME) ?> · Academic Administration Portal · <?= e(current_term()['name']) ?></footer>
         </main>
     </div>
 </div>
@@ -178,14 +177,14 @@ function page_end(): void
 
 <dialog class="modal" id="helpModal">
     <div class="modal-card">
-        <header class="modal-head"><div><h2>Help</h2><p class="muted small">How to get around the faculty portal</p></div>
+        <header class="modal-head"><div><h2>Help</h2><p class="muted small">How to use the academic administration portal</p></div>
             <button type="button" class="icon-btn" data-close aria-label="Close"><?= icon('x', 18) ?></button></header>
         <div class="modal-body">
             <ul class="help-list">
                 <li><span class="stat-icon tone-blue"><?= icon('search', 16) ?></span><div><strong>Search anything</strong><p>Press <kbd>Ctrl</kbd> + <kbd>K</kbd>, then type a name, student number, applicant ID or class code.</p></div></li>
                 <li><span class="stat-icon tone-green"><?= icon('plus', 16) ?></span><div><strong>Add records</strong><p>Use the blue “Add” button at the top of Incoming enrollment, Campus schedule, Enrollment and Faculty evaluations.</p></div></li>
                 <li><span class="stat-icon tone-purple"><?= icon('edit', 16) ?></span><div><strong>Edit or delete</strong><p>Every table row ends with a pencil (edit) and a bin (delete). Deleting always asks first.</p></div></li>
-                <li><span class="stat-icon tone-orange"><?= icon('check-sq', 16) ?></span><div><strong>Encode grades</strong><p>Open Grade submissions and click a class to edit its roster, save a draft or submit final grades.</p></div></li>
+                <li><span class="stat-icon tone-orange"><?= icon('check-sq', 16) ?></span><div><strong>Manage grade submissions</strong><p>Open Grade submissions and click a class to edit its roster, save a draft or submit final grades.</p></div></li>
                 <li><span class="stat-icon tone-red"><?= icon('alert', 16) ?></span><div><strong>Log interventions</strong><p>On At-risk students, use the pencil on a row to record contact, counseling and notes.</p></div></li>
                 <li><span class="stat-icon tone-blue"><?= icon('chart', 16) ?></span><div><strong>Explore charts</strong><p>Hover any chart for exact figures. Click bars, donut slices and funnel steps to filter the list; click a legend entry to hide or show a series.</p></div></li>
                 <li><span class="stat-icon tone-green"><?= icon('download', 16) ?></span><div><strong>Export</strong><p>“Export CSV” downloads the list exactly as currently filtered.</p></div></li>
@@ -211,6 +210,16 @@ function page_end(): void
             <button type="submit" class="btn btn--danger btn--sm"><?= icon('trash', 16) ?> <span id="confirmLabel">Delete</span></button>
         </footer>
     </form>
+</dialog>
+<dialog class="modal kpi-modal" id="kpiListModal" aria-labelledby="kpiListTitle">
+    <div class="modal-card">
+        <header class="modal-head">
+            <div><h2 id="kpiListTitle">Related records</h2><p class="muted small">Records for your selected filters</p></div>
+            <button type="button" class="icon-btn" data-close aria-label="Close list"><?= icon('x', 18) ?></button>
+        </header>
+        <div class="modal-body" id="kpiListBody" aria-live="polite"></div>
+        <footer class="modal-foot"><a class="btn btn--ghost btn--sm" id="kpiListPage" href="#">Open full page</a><button type="button" class="btn btn--primary btn--sm" data-close>Close</button></footer>
+    </div>
 </dialog>
 <div class="tip" id="tip" hidden></div>
 <script src="assets/js/app.js?v=<?= filemtime(__DIR__ . '/../assets/js/app.js') ?>"></script>

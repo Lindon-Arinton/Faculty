@@ -78,8 +78,8 @@ page_head(
     </nav>
 
     <section class="grid grid-4">
-        <?= stat_card('Sessions', number_format(count($daySessions)), 'Scheduled on ' . e($days[$day]), 'calendar', 'blue') ?>
-        <?= stat_card('Rooms in use', count($roomsToday) . ' / ' . $totalRooms, pct(count($roomsToday), $totalRooms) . '% of campus rooms', 'building', 'purple') ?>
+        <?= stat_card('Sessions', number_format(count($daySessions)), 'Scheduled on ' . e($days[$day]), 'calendar', 'blue', '#list') ?>
+        <?= stat_card('Rooms in use', count($roomsToday) . ' / ' . $totalRooms, pct(count($roomsToday), $totalRooms) . '% of campus rooms', 'building', 'purple', '#list') ?>
         <?= stat_card('Online sessions', number_format($onlineToday), 'Google Meet and MS Teams', 'video', 'green', url_with(['mode' => 'Online']) . '#list') ?>
         <?= stat_card('Room conflicts', (string) count($conflicts), count($conflicts) ? 'Double-booked rooms this week' : 'No double bookings', 'alert', count($conflicts) ? 'red' : 'green', '#conflicts') ?>
     </section>

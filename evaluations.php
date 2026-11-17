@@ -83,10 +83,10 @@ page_head(
 );
 ?>
     <section class="grid grid-4">
-        <?= stat_card('Faculty evaluated', number_format($total), $college ? e($college) : 'Across ' . count(colleges()) . ' colleges', 'users', 'blue') ?>
-        <?= stat_card('Average rating', number_format($avg, 2), ($avg >= $prevAvg ? icon('arrow-up', 11) . ' ' : icon('arrow-dn', 11) . ' ') . number_format(abs($avg - $prevAvg), 2) . ' vs last term', 'star', 'orange') ?>
-        <?= stat_card('Response rate', pct($responses, $enrolled) . '%', number_format($enrolled) . ' students invited', 'check-sq', 'green') ?>
-        <?= stat_card('Total responses', number_format($responses), 'Individual answers stay private', 'shield', 'purple') ?>
+        <?= stat_card('Faculty evaluated', number_format($total), $college ? e($college) : 'Across ' . count(colleges()) . ' colleges', 'users', 'blue', '#list') ?>
+        <?= stat_card('Average rating', number_format($avg, 2), ($avg >= $prevAvg ? icon('arrow-up', 11) . ' ' : icon('arrow-dn', 11) . ' ') . number_format(abs($avg - $prevAvg), 2) . ' vs last term', 'star', 'orange', '#list') ?>
+        <?= stat_card('Response rate', pct($responses, $enrolled) . '%', number_format($enrolled) . ' students invited', 'check-sq', 'green', '#list') ?>
+        <?= stat_card('Total responses', number_format($responses), 'Individual answers stay private', 'shield', 'purple', '#list') ?>
     </section>
 
     <section class="grid grid-2-1">

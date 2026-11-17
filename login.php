@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <h2 style="--i: 0">Welcome back</h2>
-            <p class="muted" style="--i: 1">Sign in to continue to the faculty portal.</p>
+            <p class="muted" style="--i: 1">Sign in as an Authorized Academic Administrator to manage university-wide academic records.</p>
 
             <?php if ($error): ?>
                 <div class="alert alert--error" role="alert"><?= icon('alert', 18) ?><span><?= e($error) ?></span></div>
@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn btn--primary btn--block" id="signIn" style="--i: 5"><span>Sign in</span> <?= icon('chev-r', 16) ?></button>
             </form>
 
-            <p class="auth-foot" style="--i: 7"><?= icon('shield', 14) ?> Institutional records are role-protected.</p>
+            <p class="auth-foot" style="--i: 7"><?= icon('shield', 14) ?> Access is restricted to authorized academic administrators.</p>
         </div>
     </section>
 </main>

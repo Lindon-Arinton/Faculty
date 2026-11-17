@@ -1,6 +1,6 @@
-# BSU Faculty Portal
+# BSU Academic Administration Portal
 
-A web portal for a university faculty office. It tracks incoming applicants, enrolled students, the class schedule, grade submissions, at-risk students and faculty evaluations, with charts on every page.
+A university-wide portal whose primary user is the **Authorized Academic Administrator**. It supports academic office staff explicitly authorized to manage institutional academic records, rather than individual faculty accounts. It tracks incoming applicants, enrolled students, the class schedule, grade submissions, at-risk students and faculty evaluations, with charts on every page.
 
 It is plain PHP and MySQL with no frameworks and nothing to install or build. It comes with a sample university (about 5,800 students, 1,000 classes and 3,200 applicants) that is created automatically the first time you open it.
 
@@ -51,6 +51,15 @@ The logo is [`assets/img/logo.png`](assets/img/logo.png). Replace that file to c
 ### Changing the login
 
 Editing `DEFAULT_USER_EMAIL` or `DEFAULT_USER_PASS` has no effect once the account exists. To apply new values, empty the `users` table in phpMyAdmin (<http://localhost/phpmyadmin>, database `veritas_portal`) and open the portal again; it recreates the account from `config.php`.
+
+## Access and responsibilities
+
+- The primary user is the **Authorized Academic Administrator**.
+- This role manages applicants, enrollment, schedules, grade submissions, student interventions, faculty records, and aggregate evaluations across colleges.
+- Faculty members are managed records in this portal; a Faculty role does not grant login access.
+- The server checks the stored user role on login and every protected request, including record changes and exports.
+- Existing default credentials are unchanged. Only the original `Faculty Office` demonstration account is migrated automatically to the administrator role. Other accounts require explicit authorization; they are not promoted automatically.
+- For an existing deployment, run `database/migrations/001_academic_administrator.sql` to update the role default and the original demonstration account. This migration does not delete users or academic records.
 
 ## Using the portal
 

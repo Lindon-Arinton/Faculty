@@ -1,4 +1,4 @@
--- Veritas Faculty Portal: institutional records
+-- Veritas Academic Administration Portal: institutional records
 -- MySQL 5.7+ / MariaDB 10.3+. Creating tables only; database/seed.php fills them.
 
 CREATE TABLE IF NOT EXISTS meta (
