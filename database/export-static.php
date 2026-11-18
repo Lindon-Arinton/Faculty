@@ -1,0 +1,79 @@
+<?php
+/**
+ * Exports the MySQL sample records for the static GitHub Pages demo in docs/.
+ * Run from the project root:  php database/export-static.php
+ * Writes docs/assets/js/data.js and docs/assets/js/model.js.
+ */
+require_once __DIR__ . '/../config.php';
+
+if (PHP_SAPI !== 'cli') {
+    http_response_code(403);
+    exit('Run this script from the command line.');
+}
+
+$pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4', DB_USER, DB_PASS, [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_NUM,
+]);
+
+// table => [SQL, [column => cast]] ; cast: i = int, f = float, anything else stays a string/null
+$tables = [
+    'meta' => ['SELECT k, v FROM meta ORDER BY k', []],
+    'terms' => ['SELECT id, name, starts_on, ends_on, grade_deadline, is_current FROM terms ORDER BY id', ['id' => 'i', 'is_current' => 'i']],
+    'colleges' => ['SELECT id, code, name, short_name, building FROM colleges ORDER BY id', ['id' => 'i']],
+    'programs' => ['SELECT id, college_id, code, name FROM programs ORDER BY id', ['id' => 'i', 'college_id' => 'i']],
+    'rooms' => ['SELECT id, college_id, name, type, capacity FROM rooms ORDER BY id', ['id' => 'i', 'college_id' => 'i', 'capacity' => 'i']],
+    'faculty' => ['SELECT id, college_id, title, first_name, last_name, `rank`, employment, email FROM faculty ORDER BY id', ['id' => 'i', 'college_id' => 'i']],
+    'courses' => ['SELECT id, college_id, code, title, units, kind FROM courses ORDER BY id', ['id' => 'i', 'college_id' => 'i', 'units' => 'i']],
+    'students' => ['SELECT id, student_no, first_name, middle_name, last_name, sex, birthdate, email, program_id, year_level, block, status, back_subjects, adviser_id, enrolled_at FROM students ORDER BY id',
+        ['id' => 'i', 'program_id' => 'i', 'year_level' => 'i', 'back_subjects' => 'i', 'adviser_id' => 'i']],
+    'sections' => ['SELECT id, term_id, course_id, program_id, year_level, block, faculty_id, mode, platform, grades_updated_at, grades_submitted_at FROM sections ORDER BY id',
+        ['id' => 'i', 'term_id' => 'i', 'course_id' => 'i', 'program_id' => 'i', 'year_level' => 'i', 'faculty_id' => 'i']],
+    'meetings' => ['SELECT id, section_id, day, start_time, end_time, room_id FROM meetings ORDER BY id', ['id' => 'i', 'section_id' => 'i', 'room_id' => 'i']],
+    'enrollments' => ['SELECT section_id, student_id, midterm_grade, final_grade FROM enrollments ORDER BY section_id, student_id', ['section_id' => 'i', 'student_id' => 'i']],
+    'interventions' => ['SELECT student_id, status, last_contact_at, notes FROM interventions ORDER BY student_id', ['student_id' => 'i']],
+    'risk_snapshots' => ['SELECT month, college_id, at_risk FROM risk_snapshots ORDER BY month, college_id', ['college_id' => 'i', 'at_risk' => 'i']],
+    // Responses are anonymous and only ever averaged, so the demo ships per-section sums.
+    'evaluation_totals' => ['SELECT section_id, COUNT(*) responses, SUM(teaching) teaching, SUM(organization) organization, SUM(communication) communication, SUM(fairness) fairness, SUM(punctuality) punctuality
+                             FROM evaluation_responses GROUP BY section_id ORDER BY section_id',
+        ['section_id' => 'i', 'responses' => 'i', 'teaching' => 'i', 'organization' => 'i', 'communication' => 'i', 'fairness' => 'i', 'punctuality' => 'i']],
+    'faculty_rating_history' => ['SELECT faculty_id, term_id, rating, responses FROM faculty_rating_history ORDER BY faculty_id, term_id', ['faculty_id' => 'i', 'term_id' => 'i', 'rating' => 'f', 'responses' => 'i']],
+    'applicants' => ['SELECT id, applicant_no, first_name, middle_name, last_name, sex, email, program_id, type, shs_strand, prior_gwa, exam_date, exam_score, status, submitted_at, updated_at FROM applicants ORDER BY id',
+        ['id' => 'i', 'program_id' => 'i', 'prior_gwa' => 'f', 'exam_score' => 'i']],
+    'applicant_requirements' => ['SELECT applicant_id, requirement, submitted_at FROM applicant_requirements ORDER BY applicant_id, requirement', ['applicant_id' => 'i']],
+];
+
+$out = [];
+foreach ($tables as $name => [$sql, $casts]) {
+    $stmt = $pdo->query($sql);
+    $cols = [];
+    for ($i = 0; $i < $stmt->columnCount(); $i++) {
+        $cols[] = $stmt->getColumnMeta($i)['name'];
+    }
+    $rows = [];
+    foreach ($stmt->fetchAll() as $row) {
+        foreach ($row as $i => $v) {
+            if ($v === null) continue;
+            $cast = $casts[$cols[$i]] ?? '';
+            if ($cast === 'i') $row[$i] = (int) $v;
+            elseif ($cast === 'f') $row[$i] = (float) $v;
+        }
+        $rows[] = $row;
+    }
+    $out[$name] = ['c' => $cols, 'r' => $rows];
+    printf("%-24s %6d rows\n", $name, count($rows));
+}
+
+$docs = __DIR__ . '/../docs/assets/js/';
+if (!is_dir($docs)) mkdir($docs, 0777, true);
+$json = json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+file_put_contents($docs . 'data.js', "/* Generated by database/export-static.php. Do not edit. */\nwindow.PORTAL_SEED=" . $json . ";\n");
+
+$artifacts = __DIR__ . '/../analytics/artifacts/';
+$model = [];
+foreach (['tree' => 'tree.json', 'metrics' => 'metrics.json', 'samples' => 'demo-samples.json'] as $key => $file) {
+    $model[$key] = json_decode((string) file_get_contents($artifacts . $file), true, 512, JSON_THROW_ON_ERROR);
+}
+file_put_contents($docs . 'model.js', "/* Generated by database/export-static.php from analytics/artifacts. Do not edit. */\nwindow.PORTAL_MODEL=" . json_encode($model, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . ";\n");
+
+printf("data.js  %.1f KB\nmodel.js %.1f KB\n", filesize($docs . 'data.js') / 1024, filesize($docs . 'model.js') / 1024);
