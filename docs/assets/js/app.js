@@ -8,10 +8,7 @@
     var sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
 
-    // ---------- Account menu: sign out, reset demo data ----------
-    each('[data-logout]', function (btn) {
-        btn.addEventListener('click', function () { window.Portal.sign_out(); });
-    });
+    // ---------- Account menu: reset demo data ----------
     each('[data-reset-demo]', function (btn) {
         btn.addEventListener('click', function () {
             if (!window.confirm('Discard every change you made and go back to the original sample records?')) return;

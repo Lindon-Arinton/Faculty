@@ -1224,115 +1224,12 @@
     }
 
     /* ================================================================== */
-    /* Sign in                                                             */
+    /* Old sign-in address: there is no sign-in in the static demo         */
     /* ================================================================== */
 
     function login() {
-        const user = P.current_user();
-        if (user) { location.replace(P.home_for_user(user)); throw new P.Halt(); }
-        document.title = 'Sign in · ' + P.APP_NAME + ' ' + P.APP_TAGLINE;
-        document.body.className = 'auth-body';
-        const active = P.active_term().id;
-        const hero = [
-            ['Students', P.db.count('students')],
-            ['Active classes', P.db.count('sections', x => x.term_id === active)],
-            ['Colleges', P.db.count('colleges')],
-        ];
-        const brand = '<div class="brand-mark" role="img" aria-label="' + e(P.APP_NAME) + ' logo"></div><div><div class="brand-name">' + e(P.APP_NAME) + '</div><div class="brand-sub">' + e(P.APP_TAGLINE) + '</div></div>';
-        const notice = q('signed_out') !== '' ? 'You have been signed out.' : '';
-        return '<main class="auth"><section class="auth-hero" aria-hidden="true"><span class="auth-grid"></span><span class="orb orb--1"></span><span class="orb orb--2"></span><span class="orb orb--3"></span>'
-            + '<div class="brand brand--light">' + brand + '</div><div class="auth-hero-copy">'
-            + '<h1 style="--i: 1">Every college, class and student in one place.</h1>'
-            + '<p style="--i: 2">Track enrollment, grade submissions, at-risk students and faculty evaluations across the whole university.</p>'
-            + '<ul class="auth-points"><li style="--i: 3"><span>' + icon('users', 18) + '</span>Live school-wide enrollment and admissions</li>'
-            + '<li style="--i: 4"><span>' + icon('check-sq', 18) + '</span>Grade submission progress by college</li>'
-            + '<li style="--i: 5"><span>' + icon('shield', 18) + '</span>Role-protected records, anonymous evaluations</li></ul></div>'
-            + '<div class="auth-hero-stats">' + hero.map(([label, n], i) => '<div style="--i: ' + (6 + i) + '"><strong data-count="' + n + '">' + number_format(n) + '</strong><span>' + label + '</span></div>').join('') + '</div></section>'
-            + '<section class="auth-panel"><div class="auth-card"><div class="brand auth-mobile-brand">' + brand + '</div>'
-            + '<h2 style="--i: 0">Welcome back</h2><p class="muted" style="--i: 1">Sign in to continue to the faculty portal.</p>'
-            + '<div class="alert alert--error" role="alert" id="loginError" hidden>' + icon('alert', 18) + '<span></span></div>'
-            + (notice ? '<div class="alert alert--info" role="status" id="loginNotice">' + icon('check', 18) + '<span>' + e(notice) + '</span></div>' : '')
-            + '<div class="alert alert--info" role="note">' + icon('shield', 18) + '<span>Static demo with sample records. Sign in with <strong>' + e(P.DEMO_ACCOUNT.email) + '</strong> / <strong>' + e(P.DEMO_PASSWORD) + '</strong>.</span></div>'
-            + '<form class="auth-form" id="loginForm" novalidate>'
-            + '<label class="field" style="--i: 2"><span class="field-label">Email address</span><span class="field-control">' + icon('mail', 18)
-            + '<input type="text" name="email" placeholder="Enter your email" autocomplete="username" required autofocus></span></label>'
-            + '<label class="field" style="--i: 3"><span class="field-label">Password</span><span class="field-control">' + icon('lock', 18)
-            + '<input type="password" name="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>'
-            + '<button type="button" class="field-toggle" id="togglePassword" aria-label="Show password"><span class="i-show">' + icon('eye', 18) + '</span><span class="i-hide" hidden>' + icon('eye-off', 18) + '</span></button></span>'
-            + '<span class="caps-warn" id="capsWarn" hidden>' + icon('alert', 14) + ' Caps Lock is on</span></label>'
-            + '<div class="auth-row" style="--i: 4"><label class="check"><input type="checkbox" name="remember" value="1"><span>Keep me signed in</span></label><a href="#" class="link" id="forgotLink">Forgot password?</a></div>'
-            + '<div class="alert alert--info" id="forgotNote" hidden>' + icon('mail', 18) + '<span>This is a demo, so the password is always ' + e(P.DEMO_PASSWORD) + '. In the real portal, passwords are reset by the Registrar’s Office.</span></div>'
-            + '<button type="submit" class="btn btn--primary btn--block" id="signIn" style="--i: 5"><span>Sign in</span> ' + icon('chev-r', 16) + '</button></form>'
-            + '<p class="auth-foot" style="--i: 7">' + icon('shield', 14) + ' Institutional records are role-protected.</p></div></section></main>';
-    }
-
-    function bindLogin() {
-        const form = document.getElementById('loginForm');
-        if (!form) return;
-        const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const password = document.getElementById('password');
-        const btn = document.getElementById('signIn');
-        const errorBox = document.getElementById('loginError');
-
-        document.getElementById('togglePassword').addEventListener('click', function () {
-            const show = password.type === 'password';
-            password.type = show ? 'text' : 'password';
-            this.querySelector('.i-show').hidden = show;
-            this.querySelector('.i-hide').hidden = !show;
-            this.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
-            password.focus();
-        });
-        const caps = document.getElementById('capsWarn');
-        ['keydown', 'keyup'].forEach(type => password.addEventListener(type, ev => { if (ev.getModifierState) caps.hidden = !ev.getModifierState('CapsLock'); }));
-        password.addEventListener('blur', () => { caps.hidden = true; });
-        document.querySelectorAll('.field-control input').forEach(inputEl => {
-            const mark = () => inputEl.parentNode.classList.toggle('is-filled', inputEl.value !== '');
-            inputEl.addEventListener('input', mark);
-            mark();
-        });
-        document.getElementById('forgotLink').addEventListener('click', ev => {
-            ev.preventDefault();
-            const note = document.getElementById('forgotNote');
-            note.hidden = !note.hidden;
-        });
-        form.addEventListener('submit', ev => {
-            ev.preventDefault();
-            const res = P.sign_in(form.elements.email.value.trim(), form.elements.password.value, form.elements.remember.checked);
-            if (res.error) {
-                errorBox.querySelector('span').textContent = res.error;
-                errorBox.hidden = false;
-                const n = document.getElementById('loginNotice');
-                if (n) n.hidden = true;
-                return;
-            }
-            btn.classList.add('is-busy');
-            btn.querySelector('span').textContent = 'Signing in…';
-            btn.disabled = true;
-            document.body.classList.add('is-leaving');
-            setTimeout(() => { location.href = P.home_for_user(res.user); }, 250);
-        });
-        window.addEventListener('pageshow', ev => {
-            if (!ev.persisted) return;
-            btn.disabled = false;
-            btn.classList.remove('is-busy');
-            btn.querySelector('span').textContent = 'Sign in';
-            document.body.classList.remove('is-leaving');
-        });
-        if (!calm) {
-            document.querySelectorAll('[data-count]').forEach(el => {
-                const target = +el.dataset.count;
-                let start = null;
-                if (!target) return;
-                el.textContent = '0';
-                const frame = now => {
-                    start = start || now;
-                    const t = Math.min(1, Math.max(0, (now - start - 600) / 1100));
-                    el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3))).toLocaleString('en-US');
-                    if (t < 1) requestAnimationFrame(frame);
-                };
-                requestAnimationFrame(frame);
-            });
-        }
+        location.replace('index.html');
+        throw new P.Halt();
     }
 
     /* ================================================================== */
@@ -1343,7 +1240,7 @@
         overview, incoming, enrollment, schedule, grades, class: classPage, 'at-risk': atRisk,
         evaluations, predictions, setup, search, login,
     };
-    const AFTER = { predictions: bindPredictions, login: bindLogin };
+    const AFTER = { predictions: bindPredictions };
 
     const name = document.body.dataset.page;
     try {
@@ -1359,7 +1256,7 @@
     } catch (err) {
         if (!(err instanceof P.Halt)) {
             console.error(err);
-            document.body.innerHTML = '<main class="content"><section class="card panel"><h1>Something went wrong</h1><p class="muted">This page could not be built. Try <a href="#" id="resetLink">resetting the demo data</a> or <a href="login.html">signing in again</a>.</p></section></main>';
+            document.body.innerHTML = '<main class="content"><section class="card panel"><h1>Something went wrong</h1><p class="muted">This page could not be built. Try <a href="#" id="resetLink">resetting the demo data</a>.</p></section></main>';
             document.getElementById('resetLink').addEventListener('click', ev => { ev.preventDefault(); P.db.reset(); location.reload(); });
         }
     }

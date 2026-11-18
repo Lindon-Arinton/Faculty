@@ -17,16 +17,11 @@
 
     const APP_NAME = 'BSU';
     const APP_TAGLINE = 'Faculty Portal';
-    // Demo sign-in. This is a public static site: the gate is for show, not security.
-    const DEMO_ACCOUNT = { id: 1, name: 'Faculty Office', email: 'facultyfaculty', role: 'University-wide access' };
-    const DEMO_PASSWORD = '12345';
-    const MAX_LOGIN_ATTEMPTS = 5;
-    const LOCKOUT_SECONDS = 300;
+    // The account every visitor uses. The static demo has no sign-in.
+    const DEMO_ACCOUNT = { id: 1, name: 'Faculty Office', email: 'Static demo', role: 'University-wide access' };
     const EDITS_KEY = 'bsu-portal-demo-edits-v1';
-    const SESSION_KEY = 'bsu-portal-demo-session';
     const FLASH_KEY = 'bsu-portal-demo-flash';
     const TERM_KEY = 'bsu-portal-demo-term';
-    const LOGIN_KEY = 'bsu-portal-demo-login';
 
     const REQUIREMENTS = ['Form 138 / Transcript', 'PSA birth certificate', 'Good moral certificate', 'Medical clearance', '2x2 ID photos'];
     const RISK_TYPES = ['Failing', 'INC', 'Behind curriculum'];
@@ -44,7 +39,7 @@
     const DAY_ORDER = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
     const GRADE_VALUES = ['1.00', '1.25', '1.50', '1.75', '2.00', '2.25', '2.50', '2.75', '3.00', '5.00', 'INC', 'DRP'];
 
-    Object.assign(P, { APP_NAME, APP_TAGLINE, REQUIREMENTS, RISK_TYPES, RISK_BACK_SUBJECTS, INTERVENTION_STATUSES, EVAL_CATEGORIES, EVAL_LABELS, WEEK_DAYS, GRADE_VALUES, DEMO_ACCOUNT, DEMO_PASSWORD });
+    Object.assign(P, { APP_NAME, APP_TAGLINE, REQUIREMENTS, RISK_TYPES, RISK_BACK_SUBJECTS, INTERVENTION_STATUSES, EVAL_CATEGORIES, EVAL_LABELS, WEEK_DAYS, GRADE_VALUES, DEMO_ACCOUNT });
 
     /* ================================================================== */
     /* Browser storage (every access can throw in private windows)         */
@@ -334,10 +329,8 @@
     /* Sign-in, roles and messages                                         */
     /* ================================================================== */
 
-    function current_user() {
-        const raw = sget('sessionStorage', SESSION_KEY) || sget('localStorage', SESSION_KEY);
-        return raw === '1' ? Object.assign({}, DEMO_ACCOUNT) : null;
-    }
+    /** The static demo has no sign-in: every visitor uses the demo account. */
+    const current_user = () => Object.assign({}, DEMO_ACCOUNT);
 
     function role_permissions(role) {
         switch (role) {
@@ -363,48 +356,12 @@
     }
     const home_for_user = user => can('academic.view', user) ? 'index.html' : 'predictions.html';
 
-    /** Returns the user, or sends the visitor to the sign-in page. */
-    function require_login() {
-        const user = current_user();
-        if (!user) { location.replace('login.html'); throw new P.Halt(); }
-        return user;
-    }
+    const require_login = () => current_user();
     function require_permission(permission, user) {
         if (!can(permission, user)) {
             document.body.innerHTML = '<main class="content"><p>Access denied. Your account role does not authorize this feature.</p></main>';
             throw new P.Halt();
         }
-    }
-
-    function sign_in(email, password, remember) {
-        let st = {};
-        try { st = JSON.parse(sget('localStorage', LOGIN_KEY) || '{}') || {}; } catch (err) { st = {}; }
-        const now = Math.floor(Date.now() / 1000);
-        if ((st.lockedUntil || 0) > now) {
-            return { error: 'Too many failed attempts. Try again in ' + Math.ceil((st.lockedUntil - now) / 60) + ' minute(s).' };
-        }
-        if (email === '' || password === '') return { error: 'Enter your email and password.' };
-        if (email.toLowerCase() === DEMO_ACCOUNT.email && password === DEMO_PASSWORD) {
-            sset('localStorage', LOGIN_KEY, null);
-            sset('sessionStorage', SESSION_KEY, '1');
-            if (remember) sset('localStorage', SESSION_KEY, '1');
-            return { user: Object.assign({}, DEMO_ACCOUNT) };
-        }
-        st.attempts = (st.attempts || 0) + 1;
-        let error = 'Incorrect email or password.';
-        if (st.attempts >= MAX_LOGIN_ATTEMPTS) {
-            st.lockedUntil = now + LOCKOUT_SECONDS;
-            st.attempts = 0;
-            error = 'Too many failed attempts. Try again in ' + Math.ceil(LOCKOUT_SECONDS / 60) + ' minutes.';
-        }
-        sset('localStorage', LOGIN_KEY, JSON.stringify(st));
-        return { error };
-    }
-    function sign_out() {
-        sset('sessionStorage', SESSION_KEY, null);
-        sset('localStorage', SESSION_KEY, null);
-        sset('sessionStorage', TERM_KEY, null);
-        location.href = 'login.html?signed_out=1';
     }
 
     function flash(type, text) { sset('sessionStorage', FLASH_KEY, JSON.stringify({ type, text })); }
@@ -415,7 +372,7 @@
     }
 
     P.Halt = function Halt() {};
-    Object.assign(P, { current_user, can, action_permission, home_for_user, require_login, require_permission, sign_in, sign_out, flash });
+    Object.assign(P, { current_user, can, action_permission, home_for_user, require_login, require_permission, flash });
 
     /* ================================================================== */
     /* Terms                                                               */
@@ -1211,7 +1168,6 @@
             + '<button class="avatar avatar--gradient avatar--btn" data-menu-toggle="userMenu" aria-label="Account menu">' + e(ini) + '</button>'
             + '<div class="menu" id="userMenu" hidden><div class="menu-head"><strong>' + e(user.name) + '</strong><span>' + e(user.email) + '</span></div>'
             + '<button type="button" class="menu-item" data-reset-demo>' + icon('refresh', 16) + ' Reset demo data</button>'
-            + '<button type="button" class="menu-item menu-item--danger" data-logout>' + icon('logout', 16) + ' Sign out</button>'
             + '</div></div></div></header><main class="content">';
 
         if (can('academic.view')) {
@@ -1884,7 +1840,6 @@
         post = form_post(form, submitter);
         const action = inp('action');
         const user = current_user();
-        if (!user) { location.href = 'login.html'; return; }
         if (!ACTIONS[action]) {
             flash('error', 'Unknown action.');
         } else if (!can(action_permission(action), user)) {
